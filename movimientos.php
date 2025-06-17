@@ -1,0 +1,53 @@
+<?php 
+
+
+
+
+include('templates/header.php'); ?>
+
+<form class="row gx-3 gy-3 m-0"  method="POST" action="">
+  <input type="hidden" name="id_herramienta" value="<?= $herramientaActual['id'] ?? '' ?>">
+  <div class="col-sm-3">
+    <label for="nombreHerramienta" class="form-label">Nombre:</label>
+    <input type="text" class="form-control" id="nombreHerramienta" placeholder="Nombre de la herramienta"
+      value="<?= $herramientaActual['nombre_herramienta'] ?? '' ?>">
+  </div>
+
+  <div class="col-sm-3">
+    <label for="codigoHerramienta" class="form-label">Código:</label>
+    <input type="text" class="form-control" id="codigoHerramienta" placeholder="Código"
+      value="<?= $herramientaActual['codigo'] ?? '' ?>">
+  </div>
+
+  <div class="col-sm-2">
+    <label for="origenHerramienta" class="form-label">Origen:</label>
+    <input type="text" class="form-control" id="origenHerramienta" placeholder="Origen"
+      value="<?= $herramientaActual['nombre_fabrica'] ?? '' ?>">
+  </div>
+
+    <div class="col-sm-2">
+    <label for="origenHerramienta" class="form-label">Destino:</label>
+<select class="form-select" name="destino_id" required>
+  <option>Seleccionar</option>
+  <?php foreach ($fabricas as $fabrica): ?>
+<option value="<?= $fabrica['id'] ?>">
+        <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
+      </option>
+  <?php endforeach; ?>
+</select>
+  </div>
+      <div class="col-sm-2">
+    <label for="origenHerramienta" class="form-label">Proceso</label>
+<select class="form-select" name="proceso" required>
+  <option>Pendiente</option>
+  <option>Enviado</option>
+</select>
+  </div>
+
+  <div class="col-12 text-center">
+    <button type="submit" class="btn btn-primary mt-2" name="mover">Enviar</button>
+  </div>
+</form>
+
+<?php 
+include('templates/footer.php'); ?>
