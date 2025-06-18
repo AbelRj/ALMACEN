@@ -1,5 +1,5 @@
 <?php
-/*ESTO SIRVE PARA EL MENU PARA BUSCAR LA TABLA CUANDO HAGAS CLICK EN CADA MENU*/
+/*ESTO SIRVE PARA CUANDO HAGA CLICK EN CUALQUIER FABRICA DEL MENU, APARESCA SOLO LAS HERRAMIENTAS DE DICHA FABRICA*/
 $fabrica = isset($_GET['fabrica']) ? $_GET['fabrica'] : null;
 if ($fabrica) {
   $sentencia = $conexion->prepare("
@@ -17,16 +17,22 @@ if ($fabrica) {
     JOIN fabricas f ON h.id_fabrica = f.id
   ");
 }
-
 $sentencia->execute(); 
 $herramientas = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-/*FABRICAS*/
+
+
+
+
+/* VER TODAS LASFABRICAS*/
 $sentencia2 = $conexion->prepare("
     SELECT id, nombre_fabrica 
     FROM fabricas
 ");
 $sentencia2->execute(); 
 $fabricas = $sentencia2->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 
 /*TRAER DATOS MEDIANTE EL ID DE LA HERRAMIENTA*/
 

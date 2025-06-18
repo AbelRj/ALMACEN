@@ -22,7 +22,7 @@ if ($_POST) {
     if ($contrasenia === $user["password"]) {
       $_SESSION["usuario"] = $user["nombre_usuario"];
       $_SESSION["rol"] = $user["rol"]; // Guardar el rol del usuario en la sesión
-      $_SESSION["id_fabrica"]= $user["id_fabrica"];
+      $_SESSION["fabrica_id"] = $user["fabrica_id"];
       header("Location: index.php");
       exit();
     }

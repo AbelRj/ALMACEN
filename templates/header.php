@@ -1,5 +1,6 @@
 <?php
 session_start();
+//var_dump($_SESSION);
 
 if (isset($_SESSION["usuario"])) {
    //echo "Usuario Activo: " . $_SESSION["usuario"];
@@ -26,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   if ($origenId != $nuevoDestinoId) {
     // 1. Registrar el movimiento
   $stmtMovimiento = $conexion->prepare("
-  INSERT INTO movimientos (herramienta_id, origen, destino, fecha_envio, estado, proceso)
-  VALUES (:herramienta_id, :origen, :destino, NOW(), 'Enviado', :proceso)
+  INSERT INTO movimientos (herramienta_id, origen, destino, fecha_envio, proceso)
+  VALUES (:herramienta_id, :origen, :destino, NOW(), :proceso)
 ");
 $stmtMovimiento->execute([
   ':herramienta_id' => $herramientaId,
