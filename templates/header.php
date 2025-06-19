@@ -27,23 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   if ($origenId != $nuevoDestinoId) {
     // 1. Registrar el movimiento
   $stmtMovimiento = $conexion->prepare("
-  INSERT INTO movimientos (herramienta_id, origen, destino, fecha_envio, proceso)
-  VALUES (:herramienta_id, :origen, :destino, NOW(), :proceso)
+  INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso)
+  VALUES (:herramienta_id, :destino, NOW(), :proceso)
 ");
 $stmtMovimiento->execute([
   ':herramienta_id' => $herramientaId,
-  ':origen' => $origenId,
   ':destino' => $nuevoDestinoId,
   'proceso' => $proceso
 ]);
 
 
-    // 2. Actualizar la fábrica de la herramienta
-  $stmtActualizar = $conexion->prepare("UPDATE herramientas SET id_fabrica = :nuevo_id WHERE id = :id");
-    $stmtActualizar->execute([
-      ':nuevo_id' => $nuevoDestinoId,
-      ':id' => $herramientaId
-    ]);
+
 
     echo "<script>alert('Herramienta movida correctamente'); window.location='index.php';</script>";
   } else {
@@ -51,6 +45,19 @@ $stmtMovimiento->execute([
   }
 }
 
+
+
+
+
+
+// Obtener movimientos pendientes
+$sentenciaPendientes = $conexion->prepare("
+  SELECT herramienta_id FROM movimientos WHERE proceso = 'pendiente'
+");
+$sentenciaPendientes->execute();
+$pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
+
+// Esto será un array con los IDs de herramientas que tienen un movimiento pendiente
 
 ?>
 <!DOCTYPE html>
@@ -93,6 +100,13 @@ $stmtMovimiento->execute([
 </ul>
 
 <ul class="navbar-nav ms-auto">
+
+<?php /* if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): */?>
+  <li class="nav-item">
+    <a class="nav-link" href="index.php?proceso=1">Proceso de envío |</a>
+  </li>
+<?php /* endif; */?>
+
   <li class="nav-item me-4">
     <a class="nav-link" href="./cerrarSesion.php" title="Cerrar sesión">
       <i class="bi bi-box-arrow-right fs-5"></i>
@@ -107,8 +121,9 @@ $stmtMovimiento->execute([
       <h2 class="mb-4 text-center">
   <?php
 $paginaActual = basename($_SERVER['PHP_SELF']);
-
-if ($paginaActual === 'formulario.php' && isset($_GET['id'])) {
+if ($mostrarMovimientos) {
+  echo "Proceso de envíos";
+}elseif ($paginaActual === 'formulario.php' && isset($_GET['id'])) {
     echo "Editar herramienta";
 } elseif ($paginaActual === 'formulario.php') {
     echo "Agregar herramienta";
@@ -126,9 +141,10 @@ if ($paginaActual === 'formulario.php' && isset($_GET['id'])) {
   ?>
       </h2>
       <?php
-$paginaActual = basename($_SERVER['PHP_SELF']);
+
 if ($paginaActual === 'index.php') : ?>
-<?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+<?php if (!$mostrarMovimientos && isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <a href="formulario.php"><button type="button" class="btn btn-dark">Agregar Herramienta</button></a>
-  <?php endif; ?>
+<?php endif; ?>
+
 <?php endif; ?>

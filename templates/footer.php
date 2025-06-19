@@ -8,16 +8,25 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
-    <script>
-      $(document).ready(function () {
-        $('#tablaHerramientas').DataTable({
-          language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-          },
-          pageLength: 5,
-          lengthMenu: [5, 10, 25, 50, 100]
-        });
-      });
-    </script>
+<script>
+  $(document).ready(function () {
+    $('#tablaHerramientas').DataTable({
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+      },
+      pageLength: 5,
+      lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+    $('#tablaMovimientos').DataTable({
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+      },
+      pageLength: 5,
+      lengthMenu: [5, 10, 25, 50, 100]
+    });
+  });
+</script>
+
   </body>
 </html>

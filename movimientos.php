@@ -36,17 +36,21 @@ include('templates/header.php'); ?>
   <?php endforeach; ?>
 </select>
   </div>
-      <div class="col-sm-2">
-    <label for="origenHerramienta" class="form-label">Proceso</label>
-<select class="form-select" name="proceso" required>
-  <option>Pendiente</option>
-  <option>Enviado</option>
-</select>
-  </div>
 
-  <div class="col-12 text-center">
+
+<?php
+$valorProceso = 'pendiente'; // Valor por defecto
+if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
+?>
+<div class="col-sm-2">
+  <label for="proceso" class="form-label">Proceso</label>
+  <input type="text" class="form-control" name="proceso" value="<?= $valorProceso ?>" readonly>
+</div>
+
+
+<div class="col-12 text-center">
     <button type="submit" class="btn btn-primary mt-2" name="mover">Enviar</button>
-  </div>
+</div>
 </form>
 
 <?php 
