@@ -1,21 +1,26 @@
 <?php
-session_start();
-//var_dump($_SESSION);
+/*SABER SI HAY INICIO DE SESION EXISTENTE*/
+      session_start();
+      //var_dump($_SESSION);
 
-if (isset($_SESSION["usuario"])) {
-   //echo "Usuario Activo: " . $_SESSION["usuario"];
-   //echo "Rol del usuario: " . $_SESSION["rol"]; // Para depuración
-} else {
-    header("location:login.php");
-}
+      if (isset($_SESSION["usuario"])) {
+        //echo "Usuario Activo: " . $_SESSION["usuario"];
+        //echo "Rol del usuario: " . $_SESSION["rol"]; // Para depuración
+      } else {
+          header("location:login.php");
+      }
+
+
 include("bd.php");
 include("crud/leer.php");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
 
+/*Insertar Datos del movimiento de la herramienta*/
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   $herramientaId = $_POST['id_herramienta'];
   $nuevoDestinoId = $_POST['destino_id'];
   $proceso = $_POST['proceso'];
+  $estadoH = $_POST['estadoH'];
 
   // Obtener el ID de fábrica actual (origen)
   $stmtOrigen = $conexion->prepare("SELECT id_fabrica FROM herramientas WHERE id = :id");
@@ -25,19 +30,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
 
   // Validar que el destino es diferente del origen
   if ($origenId != $nuevoDestinoId) {
-    // 1. Registrar el movimiento
-  $stmtMovimiento = $conexion->prepare("
-  INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso)
-  VALUES (:herramienta_id, :destino, NOW(), :proceso)
-");
-$stmtMovimiento->execute([
-  ':herramienta_id' => $herramientaId,
-  ':destino' => $nuevoDestinoId,
-  'proceso' => $proceso
-]);
+   $esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
 
+    if ($esAdmin) {
+        $usuarioAdmin = $_SESSION['usuario'];
 
+        // Inserta movimiento con aprobado_por
+        $stmtMovimiento = $conexion->prepare("
+            INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso, aprobado_por)
+            VALUES (:herramienta_id, :destino, NOW(), :proceso, :aprobado_por)
+        ");
+        $stmtMovimiento->execute([
+            ':herramienta_id' => $herramientaId,
+            ':destino' => $nuevoDestinoId,
+            ':proceso' => $proceso,
+            ':aprobado_por' => $usuarioAdmin
+        ]);
 
+        // Actualiza la fábrica directamente
+        $stmtActualizarFabrica = $conexion->prepare("
+            UPDATE herramientas SET id_fabrica = :nuevo_id WHERE id = :id
+        ");
+        $stmtActualizarFabrica->execute([
+            ':nuevo_id' => $nuevoDestinoId,
+            ':id' => $herramientaId
+        ]);
+    } else {
+        // Inserta movimiento sin aprobado_por
+        $stmtMovimiento = $conexion->prepare("
+            INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso)
+            VALUES (:herramienta_id, :destino, NOW(), :proceso)
+        ");
+        $stmtMovimiento->execute([
+            ':herramienta_id' => $herramientaId,
+            ':destino' => $nuevoDestinoId,
+            ':proceso' => $proceso
+        ]);
+    }
+
+     $stmtActualizarEstadoH = $conexion->prepare("
+        UPDATE herramientas SET estado = :estado WHERE id = :id
+      ");
+     $stmtActualizarEstadoH->execute([
+        ':estado' => $estadoH,
+        ':id' => $herramientaId
+      ]);
+
+    
+
+    // 3. Eliminar movimientos antiguos con proceso = 'enviado', dejando solo los 3 más recientes
+    $stmtIds = $conexion->prepare("
+      SELECT id FROM movimientos
+      WHERE herramienta_id = :herramienta_id AND proceso = 'enviado'
+      ORDER BY fecha_envio DESC
+      LIMIT 18446744073709551615 OFFSET 3
+    ");
+    $stmtIds->execute([':herramienta_id' => $herramientaId]);
+    $idsAEliminar = $stmtIds->fetchAll(PDO::FETCH_COLUMN);
+
+    if (!empty($idsAEliminar)) {
+      // Convertir a una lista separada por coma
+      $placeholders = implode(',', array_fill(0, count($idsAEliminar), '?'));
+      $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
+      $stmtEliminar->execute($idsAEliminar);
+    }
 
     echo "<script>alert('Herramienta movida correctamente'); window.location='index.php';</script>";
   } else {
@@ -47,17 +103,14 @@ $stmtMovimiento->execute([
 
 
 
-
-
-
-// Obtener movimientos pendientes
+/*Obtener movimientos pendientes, esto lo estoy usando para el boton de envio*/
 $sentenciaPendientes = $conexion->prepare("
   SELECT herramienta_id FROM movimientos WHERE proceso = 'pendiente'
 ");
 $sentenciaPendientes->execute();
 $pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
 
-// Esto será un array con los IDs de herramientas que tienen un movimiento pendiente
+
 
 ?>
 <!DOCTYPE html>

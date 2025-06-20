@@ -6,6 +6,7 @@
       <thead class="table-dark text-center">
         <tr>
           <th>Herramienta</th>
+          <th>Estado</th>
           <th>Origen</th>
           <th>Destino</th>
           <th>Fecha de envío</th>
@@ -17,6 +18,7 @@
         <?php foreach($movimientos as $mov): ?>
         <tr>
           <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($mov['estado'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['destino_nombre'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['fecha_envio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
