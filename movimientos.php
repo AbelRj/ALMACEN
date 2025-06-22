@@ -19,7 +19,7 @@ include('templates/header.php'); ?>
       value="<?= $herramientaActual['codigo'] ?? '' ?>">
   </div>
 
-    <div class="col-sm-2">
+    <div class="col-sm-1">
     <label for="origenHerramienta" class="form-label">Estado</label>
     <select class="form-select" name="estadoH">
       <option <?= (isset($herramientaActual['estado']) && $herramientaActual['estado'] == 'bueno') ? 'selected' : '' ?> value="bueno">Bueno</option>
@@ -29,8 +29,9 @@ include('templates/header.php'); ?>
 
   <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Origen:</label>
-    <input type="text" class="form-control" id="origenHerramienta" placeholder="Origen"
+    <input type="text" class="form-control" id="origenHerramienta" placeholder="Origen" 
       value="<?= $herramientaActual['nombre_fabrica'] ?? '' ?>">
+    <input type="hidden" name="origen" value="<?= $herramientaActual['id_fabrica'] ?? '' ?>">
   </div>
 
   <div class="col-sm-2">
@@ -45,11 +46,18 @@ include('templates/header.php'); ?>
       </select>
   </div>
 
+
+  <div class="col-sm-2" id="campoEnviadoA" style="display:none;">
+    <label for="enviado_a" class="form-label">Persona Externa:</label>
+    <input type="text" class="form-control" name="enviado_a" id="enviado_a" placeholder="Nombre destino alternativo">
+  </div>
+
+
 <?php
 $valorProceso = 'pendiente'; // Valor por defecto
 if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
 ?>
-<div class="col-sm-2">
+<div class="col-sm-1">
   <label for="proceso" class="form-label">Proceso</label>
   <input type="text" class="form-control" name="proceso" value="<?= $valorProceso ?>" readonly>
 </div>
@@ -59,6 +67,63 @@ if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorPro
     <button type="submit" class="btn btn-primary mt-2" name="mover">Enviar</button>
 </div>
 </form>
+
+
+ <?php
+if (isset($herramientaActual['id'])) {
+    $idHerramienta = $herramientaActual['id'];
+
+$stmtMovimientos = $conexion->prepare("
+    SELECT 
+        m.*, 
+        h.nombre_herramienta,
+        f1.nombre_fabrica AS origen_nombre,
+        f2.nombre_fabrica AS destino_nombre
+    FROM movimientos m
+    LEFT JOIN herramientas h ON m.herramienta_id = h.id
+    LEFT JOIN fabricas f1 ON m.origen = f1.id
+    LEFT JOIN fabricas f2 ON m.destino = f2.id
+    WHERE m.herramienta_id = :id
+    ORDER BY m.fecha_envio DESC
+");
+    $stmtMovimientos->execute([':id' => $idHerramienta]);
+    $movimientosHerramienta = $stmtMovimientos->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($movimientosHerramienta):
+?>
+<hr>
+<h5 class="mt-4">Historial de Movimientos de la Herramienta: <?= htmlspecialchars($herramientaActual['nombre_herramienta'] ?? '') ?></h5>
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-sm">
+    <thead class="table-dark text-center">
+      <tr>
+        <th>Herramienta</th>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Fecha de Envío</th>
+        <th>Aprobado por</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($movimientosHerramienta as $mov): ?>
+      <tr>
+        <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '---') ?></td>
+        <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---') ?></td>
+        <td><?= htmlspecialchars($mov['destino_nombre'] ?? '---') ?></td>
+        <td><?= htmlspecialchars($mov['fecha_envio'] ?? '---') ?></td>
+        <td><?= htmlspecialchars($mov['aprobado_por'] ?? '---') ?></td>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+<?php
+    else:
+        echo "<p class='text-muted mt-4'>Esta herramienta aún no tiene movimientos registrados.</p>";
+    endif;
+}
+?>
+
 
 <?php 
 include('templates/footer.php'); ?>

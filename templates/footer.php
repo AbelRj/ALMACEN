@@ -28,5 +28,12 @@
   });
 </script>
 
+
+<script>
+document.querySelector('[name="destino_id"]').addEventListener('change', function () {
+  const valor = this.options[this.selectedIndex].text.toLowerCase();
+  document.getElementById('campoEnviadoA').style.display = valor === 'otros' ? 'block' : 'none';
+});
+</script>
   </body>
 </html>

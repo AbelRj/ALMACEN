@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   $nuevoDestinoId = $_POST['destino_id'];
   $proceso = $_POST['proceso'];
   $estadoH = $_POST['estadoH'];
+  $origen = $_POST['origen'];
+  $enviadoA = $_POST['enviado_a'] ?? null;
+
 
   // Obtener el ID de fábrica actual (origen)
   $stmtOrigen = $conexion->prepare("SELECT id_fabrica FROM herramientas WHERE id = :id");
@@ -37,14 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
 
         // Inserta movimiento con aprobado_por
         $stmtMovimiento = $conexion->prepare("
-            INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso, aprobado_por)
-            VALUES (:herramienta_id, :destino, NOW(), :proceso, :aprobado_por)
+            INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso, aprobado_por)
+            VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso, :aprobado_por)
         ");
         $stmtMovimiento->execute([
             ':herramienta_id' => $herramientaId,
             ':destino' => $nuevoDestinoId,
             ':proceso' => $proceso,
-            ':aprobado_por' => $usuarioAdmin
+            ':aprobado_por' => $usuarioAdmin,
+            ':origen' => $origen,
+            ':persona_destino' => $enviadoA
         ]);
 
         // Actualiza la fábrica directamente
@@ -58,13 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
     } else {
         // Inserta movimiento sin aprobado_por
         $stmtMovimiento = $conexion->prepare("
-            INSERT INTO movimientos (herramienta_id, destino, fecha_envio, proceso)
-            VALUES (:herramienta_id, :destino, NOW(), :proceso)
+            INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso)
+            VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso)
         ");
         $stmtMovimiento->execute([
             ':herramienta_id' => $herramientaId,
             ':destino' => $nuevoDestinoId,
-            ':proceso' => $proceso
+            ':proceso' => $proceso,
+            ':origen' => $origen,
+            ':persona_destino' => $enviadoA
         ]);
     }
 
