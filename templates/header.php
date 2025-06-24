@@ -32,13 +32,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   $origenId = $stmtOrigen->fetchColumn();
 
   // Validar que el destino es diferente del origen
-  if ($origenId != $nuevoDestinoId) {
-   $esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
+  // Validar condiciones especiales para "Otros"
+$esMismoDestino = ($origenId == $nuevoDestinoId);
+$esOtros = false;
+
+// Consultar si el ID destino es la fábrica "Otros"
+$stmtOtros = $conexion->prepare("SELECT nombre_fabrica FROM fabricas WHERE id = :id");
+$stmtOtros->execute([':id' => $nuevoDestinoId]);
+$nombreDestino = strtolower($stmtOtros->fetchColumn() ?? '');
+
+if ($nombreDestino === 'otros') {
+    $esOtros = true;
+}
+
+// Si no es el mismo destino o es "otros" pero con persona distinta
+if (!$esMismoDestino || ($esMismoDestino && $esOtros && !empty($enviadoA))) {
+    $esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
 
     if ($esAdmin) {
         $usuarioAdmin = $_SESSION['usuario'];
 
-        // Inserta movimiento con aprobado_por
         $stmtMovimiento = $conexion->prepare("
             INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso, aprobado_por)
             VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso, :aprobado_por)
@@ -52,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
             ':persona_destino' => $enviadoA
         ]);
 
-        // Actualiza la fábrica directamente
         $stmtActualizarFabrica = $conexion->prepare("
             UPDATE herramientas SET id_fabrica = :nuevo_id WHERE id = :id
         ");
@@ -61,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
             ':id' => $herramientaId
         ]);
     } else {
-        // Inserta movimiento sin aprobado_por
         $stmtMovimiento = $conexion->prepare("
             INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso)
             VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso)
@@ -75,37 +86,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
         ]);
     }
 
-     $stmtActualizarEstadoH = $conexion->prepare("
+    $stmtActualizarEstadoH = $conexion->prepare("
         UPDATE herramientas SET estado = :estado WHERE id = :id
-      ");
-     $stmtActualizarEstadoH->execute([
+    ");
+    $stmtActualizarEstadoH->execute([
         ':estado' => $estadoH,
         ':id' => $herramientaId
-      ]);
+    ]);
 
-    
-
-    // 3. Eliminar movimientos antiguos con proceso = 'enviado', dejando solo los 3 más recientes
     $stmtIds = $conexion->prepare("
-      SELECT id FROM movimientos
-      WHERE herramienta_id = :herramienta_id AND proceso = 'enviado'
-      ORDER BY fecha_envio DESC
-      LIMIT 18446744073709551615 OFFSET 3
+        SELECT id FROM movimientos
+        WHERE herramienta_id = :herramienta_id AND proceso = 'enviado'
+        ORDER BY fecha_envio DESC
+        LIMIT 18446744073709551615 OFFSET 3
     ");
     $stmtIds->execute([':herramienta_id' => $herramientaId]);
     $idsAEliminar = $stmtIds->fetchAll(PDO::FETCH_COLUMN);
 
     if (!empty($idsAEliminar)) {
-      // Convertir a una lista separada por coma
-      $placeholders = implode(',', array_fill(0, count($idsAEliminar), '?'));
-      $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
-      $stmtEliminar->execute($idsAEliminar);
+        $placeholders = implode(',', array_fill(0, count($idsAEliminar), '?'));
+        $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
+        $stmtEliminar->execute($idsAEliminar);
     }
 
     echo "<script>alert('Herramienta movida correctamente'); window.location='index.php';</script>";
-  } else {
+} else {
     echo "<script>alert('La fábrica de destino debe ser diferente a la de origen');</script>";
-  }
+}
 }
 
 
@@ -157,15 +164,24 @@ $pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
   <li class="nav-item">
     <a class="nav-link" href="index.php?fabrica=hayduck">Hayduck</a>
   </li>
+    <li class="nav-item">
+    <a class="nav-link" href="index.php?fabrica=otros">Otros</a>
+  </li>
+
+  <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+  <li class="nav-item">
+    <a class="nav-link" href="index.php?usuarios">Usuarios</a>
+  </li>
+<?php  endif; ?>
 </ul>
 
 <ul class="navbar-nav ms-auto">
 
-<?php /* if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): */?>
+<?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <li class="nav-item">
     <a class="nav-link" href="index.php?proceso=1">Proceso de envío |</a>
   </li>
-<?php /* endif; */?>
+<?php  endif; ?>
 
   <li class="nav-item me-4">
     <a class="nav-link" href="./cerrarSesion.php" title="Cerrar sesión">

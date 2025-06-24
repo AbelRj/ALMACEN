@@ -53,13 +53,13 @@ if ($_POST) {
     <form method="POST" action="login.php" >
       <div class="mb-3">
         <label for="usuario" class="form-label">Usuario</label>
-        <input type="text" class="form-control" id="usuario" name="usuario" required>
+        <input type="text" class="form-control" id="usuario" name="usuario" required autocomplete="off">
       </div>
 
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
         <div class="input-group">
-          <input type="password" class="form-control" id="password" name="password" required>
+          <input type="password" class="form-control" id="password" name="password" required autocomplete="off">
           <button class="btn btn-outline-secondary" type="button" id="togglePassword">
             <i class="bi bi-eye" id="icono-ojo"></i>
           </button>

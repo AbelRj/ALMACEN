@@ -109,7 +109,17 @@ $stmtMovimientos = $conexion->prepare("
       <tr>
         <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '---') ?></td>
         <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---') ?></td>
-        <td><?= htmlspecialchars($mov['destino_nombre'] ?? '---') ?></td>
+        <td>
+    <?php
+    $nombreDestino = strtolower($mov['destino_nombre'] ?? '');
+    if ($nombreDestino === 'otros' && !empty($mov['persona_destino'])) {
+        echo htmlspecialchars($mov['persona_destino']);
+    } else {
+        echo htmlspecialchars($mov['destino_nombre'] ?? '---');
+    }
+  ?>
+</td>
+
         <td><?= htmlspecialchars($mov['fecha_envio'] ?? '---') ?></td>
         <td><?= htmlspecialchars($mov['aprobado_por'] ?? '---') ?></td>
       </tr>
