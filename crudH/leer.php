@@ -53,28 +53,15 @@
       }
 
 
+/*Obtener movimientos pendientes, esto lo estoy usando para el boton de envio*/
+$sentenciaPendientes = $conexion->prepare("
+  SELECT herramienta_id FROM movimientos WHERE proceso = 'pendiente'
+");
+$sentenciaPendientes->execute();
+$pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
 
 
-/*ESTO SIRVE PARA QUE CUANDO HAGAN CLICK EN PROCESO DE ENVIOS, APARESCA LOS ENVIOS DE PROCESO PENDIENTE*/
-      $mostrarMovimientos = isset($_GET['proceso']) && $_GET['proceso'] == 1;
-      if ($mostrarMovimientos) {
-      $sentenciaMov = $conexion->prepare("
-        SELECT m.*, 
-              h.nombre_herramienta,
-              h.estado, 
-              f_origen.nombre_fabrica AS origen_nombre, 
-              f_destino.nombre_fabrica AS destino_nombre
-        FROM movimientos m
-        LEFT JOIN herramientas h ON m.herramienta_id = h.id
-        LEFT JOIN fabricas f_origen ON h.id_fabrica = f_origen.id
-        LEFT JOIN fabricas f_destino ON m.destino = f_destino.id
-        WHERE m.proceso = 'pendiente'
-      ");
-      $sentenciaMov->execute();
-      $movimientos = $sentenciaMov->fetchAll(PDO::FETCH_ASSOC);
-  
 
-}
 
 
 ?>

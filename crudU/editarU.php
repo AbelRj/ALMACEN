@@ -1,0 +1,37 @@
+<?php
+include("../bd.php");
+
+    $nombreyA = $_POST['nombreyapellidoU'];
+    $nombreU = $_POST['nombreU'];
+    $passwordU = $_POST['passwordU'];
+    $emailU = $_POST['emailU'];
+    $rolU = $_POST['rolU'];
+    $fabrica_nombreU = $_POST['fabricaU'];
+
+// Buscar ID de la fábrica
+$buscarFabrica = $conexion->prepare("SELECT id FROM fabricas WHERE nombre_fabrica = :nombre");
+$buscarFabrica->bindParam(':nombre', $fabrica_nombreU);
+$buscarFabrica->execute();
+$fabricaRow = $buscarFabrica->fetch(PDO::FETCH_ASSOC);
+$idFabrica = $fabricaRow['id'] ?? null;
+
+// Comprobamos que venga el botón 'editar' y el parámetro 'id' por GET
+if (isset($_POST['editar']) && isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $sentencia = $conexion->prepare("UPDATE usuarios SET nombre_apellido = :nombreyA, nombre_usuario = :nombre_usuario, 
+    password = :password, email = :email, rol = :rol, fabrica_id = :fabrica_id WHERE id = :id");
+    $sentencia->bindParam(':nombreyA', $nombreyA);
+    $sentencia->bindParam(':nombre_usuario', $nombreU);
+    $sentencia->bindParam(':password', $passwordU);
+    $sentencia->bindParam(':email', $emailU);
+    $sentencia->bindParam(':rol', $rolU);
+    $sentencia->bindParam(':fabrica_id', $idFabrica);
+    $sentencia->bindParam(':id', $id);
+    $sentencia->execute();
+
+    // Redirigir luego de editar
+    header("Location: ../listaUsuarios.php");
+    exit();
+}
+?>

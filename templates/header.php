@@ -2,7 +2,6 @@
 /*SABER SI HAY INICIO DE SESION EXISTENTE*/
       session_start();
       //var_dump($_SESSION);
-
       if (isset($_SESSION["usuario"])) {
         //echo "Usuario Activo: " . $_SESSION["usuario"];
         //echo "Rol del usuario: " . $_SESSION["rol"]; // Para depuración
@@ -12,119 +11,9 @@
 
 
 include("bd.php");
-include("crud/leer.php");
-
-
-/*Insertar Datos del movimiento de la herramienta*/
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
-  $herramientaId = $_POST['id_herramienta'];
-  $nuevoDestinoId = $_POST['destino_id'];
-  $proceso = $_POST['proceso'];
-  $estadoH = $_POST['estadoH'];
-  $origen = $_POST['origen'];
-  $enviadoA = $_POST['enviado_a'] ?? null;
-
-
-  // Obtener el ID de fábrica actual (origen)
-  $stmtOrigen = $conexion->prepare("SELECT id_fabrica FROM herramientas WHERE id = :id");
-  $stmtOrigen->bindParam(':id', $herramientaId, PDO::PARAM_INT);
-  $stmtOrigen->execute();
-  $origenId = $stmtOrigen->fetchColumn();
-
-  // Validar que el destino es diferente del origen
-  // Validar condiciones especiales para "Otros"
-$esMismoDestino = ($origenId == $nuevoDestinoId);
-$esOtros = false;
-
-// Consultar si el ID destino es la fábrica "Otros"
-$stmtOtros = $conexion->prepare("SELECT nombre_fabrica FROM fabricas WHERE id = :id");
-$stmtOtros->execute([':id' => $nuevoDestinoId]);
-$nombreDestino = strtolower($stmtOtros->fetchColumn() ?? '');
-
-if ($nombreDestino === 'otros') {
-    $esOtros = true;
-}
-
-// Si no es el mismo destino o es "otros" pero con persona distinta
-if (!$esMismoDestino || ($esMismoDestino && $esOtros && !empty($enviadoA))) {
-    $esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
-
-    if ($esAdmin) {
-        $usuarioAdmin = $_SESSION['usuario'];
-
-        $stmtMovimiento = $conexion->prepare("
-            INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso, aprobado_por)
-            VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso, :aprobado_por)
-        ");
-        $stmtMovimiento->execute([
-            ':herramienta_id' => $herramientaId,
-            ':destino' => $nuevoDestinoId,
-            ':proceso' => $proceso,
-            ':aprobado_por' => $usuarioAdmin,
-            ':origen' => $origen,
-            ':persona_destino' => $enviadoA
-        ]);
-
-        $stmtActualizarFabrica = $conexion->prepare("
-            UPDATE herramientas SET id_fabrica = :nuevo_id WHERE id = :id
-        ");
-        $stmtActualizarFabrica->execute([
-            ':nuevo_id' => $nuevoDestinoId,
-            ':id' => $herramientaId
-        ]);
-    } else {
-        $stmtMovimiento = $conexion->prepare("
-            INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso)
-            VALUES (:herramienta_id, :origen, :destino, :persona_destino, NOW(), :proceso)
-        ");
-        $stmtMovimiento->execute([
-            ':herramienta_id' => $herramientaId,
-            ':destino' => $nuevoDestinoId,
-            ':proceso' => $proceso,
-            ':origen' => $origen,
-            ':persona_destino' => $enviadoA
-        ]);
-    }
-
-    $stmtActualizarEstadoH = $conexion->prepare("
-        UPDATE herramientas SET estado = :estado WHERE id = :id
-    ");
-    $stmtActualizarEstadoH->execute([
-        ':estado' => $estadoH,
-        ':id' => $herramientaId
-    ]);
-
-    $stmtIds = $conexion->prepare("
-        SELECT id FROM movimientos
-        WHERE herramienta_id = :herramienta_id AND proceso = 'enviado'
-        ORDER BY fecha_envio DESC
-        LIMIT 18446744073709551615 OFFSET 3
-    ");
-    $stmtIds->execute([':herramienta_id' => $herramientaId]);
-    $idsAEliminar = $stmtIds->fetchAll(PDO::FETCH_COLUMN);
-
-    if (!empty($idsAEliminar)) {
-        $placeholders = implode(',', array_fill(0, count($idsAEliminar), '?'));
-        $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
-        $stmtEliminar->execute($idsAEliminar);
-    }
-
-    echo "<script>alert('Herramienta movida correctamente'); window.location='index.php';</script>";
-} else {
-    echo "<script>alert('La fábrica de destino debe ser diferente a la de origen');</script>";
-}
-}
-
-
-
-/*Obtener movimientos pendientes, esto lo estoy usando para el boton de envio*/
-$sentenciaPendientes = $conexion->prepare("
-  SELECT herramienta_id FROM movimientos WHERE proceso = 'pendiente'
-");
-$sentenciaPendientes->execute();
-$pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
-
-
+include("crudH/leer.php");
+include('crudM/leerM.php'); 
+include('crudU/leerU.php'); 
 
 ?>
 <!DOCTYPE html>
@@ -170,7 +59,7 @@ $pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
 
   <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <li class="nav-item">
-    <a class="nav-link" href="index.php?usuarios">Usuarios</a>
+    <a class="nav-link" href="listaUsuarios.php">Usuarios</a>
   </li>
 <?php  endif; ?>
 </ul>
@@ -179,7 +68,7 @@ $pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
 
 <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <li class="nav-item">
-    <a class="nav-link" href="index.php?proceso=1">Proceso de envío |</a>
+    <a class="nav-link" href="proceso_envio.php">Proceso de envío |</a>
   </li>
 <?php  endif; ?>
 
@@ -194,33 +83,48 @@ $pendientes = $sentenciaPendientes->fetchAll(PDO::FETCH_COLUMN);
 </nav>
 </header>
 <div class="container shadow rounded bg-white p-4">
-      <h2 class="mb-4 text-center">
-  <?php
+<?php
 $paginaActual = basename($_SERVER['PHP_SELF']);
-if ($mostrarMovimientos) {
-  echo "Proceso de envíos";
-}elseif ($paginaActual === 'formulario.php' && isset($_GET['id'])) {
-    echo "Editar herramienta";
+$titulo = 'Listado de herramientas';
+
+if ($paginaActual === 'proceso_envio.php') {
+    $titulo = 'Proceso de envío de herramientas';
 } elseif ($paginaActual === 'formulario.php') {
-    echo "Agregar herramienta";
-} elseif ($paginaActual === 'movimientos.php' && isset($_GET['id'])) {
-    echo "Movimiento de herramienta";
-} elseif ($paginaActual === 'movimientos.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
-    echo "Movimientos - " . ucfirst($_GET['fabrica']);
+    $titulo = isset($_GET['id']) ? 'Editar herramienta' : 'Agregar herramienta';
+} elseif ($paginaActual === 'formularioUsuario.php') {
+    $titulo = isset($_GET['id']) ? 'Editar usuario' : 'Agregar usuario';
 } elseif ($paginaActual === 'movimientos.php') {
-    echo "Movimientos de herramientas";
+    if (isset($_GET['id'])) {
+        $titulo = 'Movimiento de herramienta';
+    } elseif (isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
+        $titulo = 'Movimientos - ' . ucfirst($_GET['fabrica']);
+    } else {
+        $titulo = 'Movimientos de herramientas';
+    }
+} elseif ($paginaActual === 'listaUsuarios.php') {
+    $titulo = 'Listado de usuarios';
 } elseif ($paginaActual === 'index.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
-    echo "Listado de herramientas - " . ucfirst($_GET['fabrica']);
-} else {
-    echo "Listado de herramientas";
+    $titulo = 'Listado de herramientas - ' . ucfirst($_GET['fabrica']);
 }
-  ?>
-      </h2>
-      <?php
+?>
 
-if ($paginaActual === 'index.php') : ?>
-<?php if (!$mostrarMovimientos && isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-  <a href="formulario.php"><button type="button" class="btn btn-dark">Agregar Herramienta</button></a>
-<?php endif; ?>
+<h2 class="mb-4 text-center"><?= $titulo ?></h2>
 
-<?php endif; ?>
+
+
+<?php
+if (
+    $paginaActual === 'listaUsuarios.php' &&
+    isset($_SESSION["rol"]) &&
+    $_SESSION["rol"] === "administrador"
+) {
+    echo '<a href="formularioUsuario.php"><button type="button" class="btn btn-dark">Agregar Usuario</button></a>';
+} elseif (
+    $paginaActual === 'index.php' &&
+    isset($_SESSION["rol"]) &&
+    $_SESSION["rol"] === "administrador"
+) {
+    echo '<a href="formulario.php"><button type="button" class="btn btn-dark">Agregar Herramienta</button></a>';
+}
+?>
+

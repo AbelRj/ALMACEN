@@ -1,11 +1,7 @@
 <?php 
-
-
-
-
 include('templates/header.php'); ?>
 
-<form class="row gx-3 gy-3 m-0"  method="POST" action="">
+<form class="row gx-3 gy-3 m-0"  method="POST" action="crudM/agregarM.php">
   <input type="hidden" name="id_herramienta" value="<?= $herramientaActual['id'] ?? '' ?>">
   <div class="col-sm-2">
     <label for="nombreHerramienta" class="form-label">Nombre:</label>

@@ -1,7 +1,7 @@
 <?php 
 include('templates/header.php'); ?>
     
-        <form class="row g-3" method="POST"  action="<?= $esEdicion ? 'crud/editar.php?id=' . $idEditar : 'crud/agregar.php' ?>">
+        <form class="row g-3" method="POST"  action="<?= $esEdicion ? 'crudH/editar.php?id=' . $idEditar : 'crudH/agregar.php' ?>">
   <div class="col-12">
     <label for="inputAddress" class="form-label">Nombre</label>
     <input type="text" class="form-control" name="nombreH" placeholder="Nombre de la herramienta"
