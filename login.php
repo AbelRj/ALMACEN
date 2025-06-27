@@ -68,6 +68,7 @@ if ($_POST) {
 
       <button type="submit" class="btn btn-light w-100">Entrar</button>
     </form>
+    <a href="restablecer.php">¿Se olvido su contraseña?</a>
   </div>
 
   <script>

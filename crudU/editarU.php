@@ -4,8 +4,19 @@ include("../bd.php");
     $nombreyA = $_POST['nombreyapellidoU'];
     $fechaU = $_POST['fechaU'];
     $nombreU = $_POST['nombreU'];
-    $passwordPlano = $_POST['passwordU'];
-$passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
+$passwordPlano = $_POST['passwordU'];
+
+if (!empty($passwordPlano)) {
+    // Si el usuario escribió una nueva contraseña
+    $passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
+} else {
+    // Si el input está vacío, mantenemos la contraseña actual
+    $stmt = $conexion->prepare("SELECT password FROM usuarios WHERE id = :id");
+    $stmt->bindParam(':id', $_GET['id']);
+    $stmt->execute();
+    $passwordU = $stmt->fetchColumn();
+}
+
     $emailU = $_POST['emailU'];
     $rolU = $_POST['rolU'];
     $fabrica_nombreU = $_POST['fabricaU'];

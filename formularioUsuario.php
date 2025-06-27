@@ -19,8 +19,8 @@ include('templates/header.php'); ?>
   </div>
   <div class="col-md-12">
     <label for="inputCity" class="form-label">Contraseña</label>
-    <input type="password" class="form-control" name="passwordU" placeholder="escriba su contraseña"
-    value="<?= $usuarioActual['password'] ?? '' ?>">
+<input type="password" class="form-control" name="passwordU" placeholder="Dejar en blanco para mantener contraseña actual">
+
   </div>
     <div class="col-md-12">
     <label for="inputCity" class="form-label">Correo Electronico</label>
