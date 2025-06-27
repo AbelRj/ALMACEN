@@ -25,6 +25,13 @@
       pageLength: 5,
       lengthMenu: [5, 10, 25, 50, 100]
     });
+       $('#tablaFabricas').DataTable({
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+      },
+      pageLength: 5,
+      lengthMenu: [5, 10, 25, 50, 100]
+    });
 
     $('#tablaMovimientos').DataTable({
       language: {
@@ -40,7 +47,7 @@
 <script>
 document.querySelector('[name="destino_id"]').addEventListener('change', function () {
   const valor = this.options[this.selectedIndex].text.toLowerCase();
-  document.getElementById('campoEnviadoA').style.display = valor === 'otros' ? 'block' : 'none';
+  document.getElementById('campoEnviadoA').style.display = valor === 'persona externa' ? 'block' : 'none';
 });
 </script>
   </body>

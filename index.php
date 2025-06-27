@@ -1,60 +1,131 @@
-<?php include('templates/header.php'); ?>
+<?php 
+include('templates/header.php'); 
+include('bd.php');
 
-<div class="table-responsive">
-  <table id="tablaHerramientas" class="table table-striped table-bordered">
-    <thead class="table-dark text-center">
-      <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Código</th>
-        <th>Estado</th>
-        <th>Fabrica</th>
-        <th>Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($herramientas as $herramienta): ?>
-      <tr>
-        <td><?= htmlspecialchars($herramienta['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-        <td><?= htmlspecialchars($herramienta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-        <td><?= htmlspecialchars($herramienta['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-        <td><?= htmlspecialchars($herramienta['estado'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-        <td><?= htmlspecialchars($herramienta['nombre_fabrica'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-        <td>
+// Gráfico 1: Herramientas por fábrica
+$sentencia = $conexion->prepare("
+  SELECT f.nombre_fabrica, COUNT(h.id) as total_herramientas
+  FROM fabricas f
+  LEFT JOIN herramientas h ON f.id = h.id_fabrica
+  GROUP BY f.id
+");
+$sentencia->execute();
+$resultados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
-        <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-            <a href="formulario.php?id=<?= $herramienta['id']; ?>" type="button" class="btn btn-dark">
-              <i class="bi bi-pencil"></i>
-            </a>
-        <?php endif; ?>
+$nombresFabricas = [];
+$totales = [];
 
-        <?php if ((isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador") || (isset($_SESSION["rol"], $_SESSION["fabrica_id"]) &&
-        $_SESSION["rol"] === "supervisor" && $_SESSION["fabrica_id"] == $herramienta["id_fabrica"])): ?>
+foreach ($resultados as $fila) {
+  $nombresFabricas[] = $fila['nombre_fabrica'];
+  $totales[] = $fila['total_herramientas'];
+}
 
-          <?php if (in_array($herramienta['id'], $pendientes)): ?>
-          <!-- Icono de X si hay movimiento pendiente -->
-            <button type="button" class="btn btn-secondary" disabled>
-              <i class="bi bi-x-lg"></i>
-            </button>
-          <?php else: ?>
-          <!-- Botón de movimiento si no hay pendiente -->
-            <a href="movimientos.php?id=<?= $herramienta['id']; ?>" type="button" class="btn btn-light">
-              <i class="bi bi-rocket-takeoff"></i>
-            </a>
-          <?php endif; ?>
-        <?php endif; ?>
+// Gráfico 2: Herramientas por estado
+$consulta = $conexion->prepare("
+  SELECT estado, COUNT(*) as cantidad
+  FROM herramientas
+  GROUP BY estado
+");
+$consulta->execute();
+$datosEstado = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
-        <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+$labelsEstado = [];
+$datosEstadoValores = [];
+$coloresDisponibles = [
+  'rgba(255, 99, 132, 0.6)',
+  'rgba(54, 162, 235, 0.6)',
+  'rgba(255, 206, 86, 0.6)',
+  'rgba(75, 192, 192, 0.6)',
+  'rgba(153, 102, 255, 0.6)',
+  'rgba(255, 159, 64, 0.6)'
+];
+$coloresEstado = [];
 
-            <a href="crudH/eliminar.php?id=<?= $herramienta['id']; ?>" type="button" class="btn btn-danger">
-              <i class="bi bi-trash3"></i>
-            </a>
+foreach ($datosEstado as $index => $fila) {
+  $labelsEstado[] = $fila['estado'];
+  $datosEstadoValores[] = $fila['cantidad'];
+  $coloresEstado[] = $coloresDisponibles[$index % count($coloresDisponibles)];
+}
+?>
 
-        <?php endif; ?>
-        </td>
-      </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Gráfico: Herramientas por Fábrica -->
+<div style="width: 80%; margin: auto; margin-bottom: 50px;">
+  <canvas id="graficoHerramientas"></canvas>
 </div>
+
+<!-- Gráfico: Herramientas por Estado (Circular) -->
+<div style="width: 50%; margin: auto;">
+  <canvas id="graficoEstadoCircular"></canvas>
+</div>
+
+<script>
+// Gráfico de herramientas por fábrica
+new Chart(document.getElementById('graficoHerramientas').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: <?= json_encode($nombresFabricas) ?>,
+    datasets: [{
+      label: 'Cantidad de Herramientas',
+      data: <?= json_encode($totales) ?>,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)'
+      ],
+      borderColor: 'rgba(0,0,0,0.2)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: {
+        display: true,
+        text: 'Herramientas por Fábrica'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1 }
+      }
+    }
+  }
+});
+
+// Gráfico circular de herramientas por estado
+new Chart(document.getElementById('graficoEstadoCircular').getContext('2d'), {
+  type: 'pie',
+  data: {
+    labels: <?= json_encode($labelsEstado) ?>,
+    datasets: [{
+      label: 'Estado de Herramientas',
+      data: <?= json_encode($datosEstadoValores) ?>,
+      backgroundColor: <?= json_encode($coloresEstado) ?>,
+      borderColor: 'rgba(255, 255, 255, 1)',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      },
+      title: {
+        display: true,
+        text: 'Distribución de Herramientas por Estado'
+      }
+    }
+  }
+});
+</script>
+
 <?php include('templates/footer.php'); ?>

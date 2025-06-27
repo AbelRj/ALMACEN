@@ -1,7 +1,7 @@
 <?php
 // Consulta de usuarios
 $sentenciaUsuario = $conexion->prepare("
-    SELECT u.id, u.nombre_apellido, u.nombre_usuario, u.rol, u.email, f.nombre_fabrica
+    SELECT u.id, u.nombre_apellido,u.fecha_nacimiento,  u.nombre_usuario, u.rol, u.email, f.nombre_fabrica
     FROM usuarios u
     LEFT JOIN fabricas f ON u.fabrica_id = f.id
 ");

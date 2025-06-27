@@ -24,7 +24,7 @@
 
 /*VER TODAS LASFABRICAS*/
       $sentencia2 = $conexion->prepare("
-          SELECT id, nombre_fabrica 
+          SELECT *
           FROM fabricas
       ");
       $sentencia2->execute(); 

@@ -7,6 +7,11 @@ include('templates/header.php'); ?>
     <input type="text" class="form-control" name="nombreyapellidoU" placeholder="Nombre y apellido"
     value="<?= $usuarioActual['nombre_apellido'] ?? '' ?>">
   </div>
+   <div class="col-12">
+    <label for="inputAddress" class="form-label">Fecha de nacimiento</label>
+    <input type="date" class="form-control" name="fechaU" 
+    value="<?= $usuarioActual['fecha_nacimiento'] ?? '' ?>">
+  </div>
   <div class="col-12">
     <label for="inputAddress2" class="form-label">Nombre de Usuario</label>
     <input type="text" class="form-control" name="nombreU" placeholder="Nombre de usuario"
@@ -26,11 +31,14 @@ include('templates/header.php'); ?>
     <label for="inputState" class="form-label">Fabrica</label>
 <select class="form-select" name="fabricaU">
   <option>Seleccionar</option>
-  <?php foreach ($fabricas as $fabrica): ?>
+<?php foreach ($fabricas as $fabrica): ?>
+  <?php if (strtolower($fabrica['nombre_fabrica']) !== 'persona externa'): ?>
     <option <?= (isset($usuarioActual['nombre_fabrica']) && $fabrica['nombre_fabrica'] == $usuarioActual['nombre_fabrica']) ? 'selected' : '' ?>>
       <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
     </option>
-  <?php endforeach; ?>
+  <?php endif; ?>
+<?php endforeach; ?>
+
 </select>
   </div>
     <div class="col-md-4">

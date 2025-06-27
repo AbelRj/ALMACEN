@@ -30,7 +30,7 @@ if (isset($_POST['agregar'])) {
         $insert->bindParam(':id_fabrica', $id_fabrica);
         $insert->execute();
 
-        echo "<script>alert('Herramienta agregada con éxito'); window.location.href='../index.php';</script>";
+        echo "<script>alert('Herramienta agregada con éxito'); window.location.href='../listaHerramientas.php';</script>";
     } else {
         echo "<script>alert('Error: Fábrica no encontrada');</script>";
     }

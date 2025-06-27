@@ -28,7 +28,7 @@ $stmtOtros = $conexion->prepare("SELECT nombre_fabrica FROM fabricas WHERE id = 
 $stmtOtros->execute([':id' => $nuevoDestinoId]);
 $nombreDestino = strtolower($stmtOtros->fetchColumn() ?? '');
 
-if ($nombreDestino === 'otros') {
+if ($nombreDestino === 'persona externa') {
     $esOtros = true;
 }
 
@@ -96,7 +96,7 @@ if (!$esMismoDestino || ($esMismoDestino && $esOtros && !empty($enviadoA))) {
         $stmtEliminar->execute($idsAEliminar);
     }
 
-    echo "<script>alert('Herramienta movida correctamente'); window.location='../index.php';</script>";
+    echo "<script>alert('Herramienta movida correctamente'); window.location='../listaHerramientas.php';</script>";
 } else {
     echo "<script>alert('La fábrica de destino debe ser diferente a la de origen');</script>";
 }

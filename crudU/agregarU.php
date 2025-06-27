@@ -4,8 +4,10 @@ include("../bd.php");
 
 if (isset($_POST['agregar'])) {
     $nombreyA = $_POST['nombreyapellidoU'];
+    $fechaU = $_POST['fechaU'];
     $nombreU = $_POST['nombreU'];
-    $passwordU = $_POST['passwordU'];
+    $passwordPlano = $_POST['passwordU'];
+$passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
     $emailU = $_POST['emailU'];
     $rolU = $_POST['rolU'];
     $fabrica_nombreU = $_POST['fabricaU'];
@@ -21,10 +23,11 @@ if (isset($_POST['agregar'])) {
 
         // Insertar herramienta
         $insert = $conexion->prepare("
-            INSERT INTO usuarios (nombre_apellido, nombre_usuario, password, email, rol, fabrica_id)
-            VALUES (:nombre_apellido, :nombre_usuario, :password, :email, :rol, :fabrica_id)
+            INSERT INTO usuarios (nombre_apellido, fecha_nacimiento, nombre_usuario, password, email, rol, fabrica_id)
+            VALUES (:nombre_apellido, :fecha_nacimiento, :nombre_usuario, :password, :email, :rol, :fabrica_id)
         ");
         $insert->bindParam(':nombre_apellido', $nombreyA);
+        $insert->bindParam(':fecha_nacimiento', $fechaU);
         $insert->bindParam(':nombre_usuario', $nombreU);
         $insert->bindParam(':password', $passwordU);
         $insert->bindParam(':email', $emailU);
@@ -32,7 +35,7 @@ if (isset($_POST['agregar'])) {
         $insert->bindParam(':fabrica_id', $id_fabrica);
         $insert->execute();
 
-        echo "<script>alert('Usuario creado con éxito'); window.location.href='../index.php';</script>";
+        echo "<script>alert('Usuario creado con éxito'); window.location.href='../listaUsuarios.php';</script>";
     } else {
         echo "<script>alert('Error: Fábrica no encontrada');</script>";
     }

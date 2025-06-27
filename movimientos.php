@@ -108,7 +108,7 @@ $stmtMovimientos = $conexion->prepare("
         <td>
     <?php
     $nombreDestino = strtolower($mov['destino_nombre'] ?? '');
-    if ($nombreDestino === 'otros' && !empty($mov['persona_destino'])) {
+    if ($nombreDestino === 'persona externa' && !empty($mov['persona_destino'])) {
         echo htmlspecialchars($mov['persona_destino']);
     } else {
         echo htmlspecialchars($mov['destino_nombre'] ?? '---');

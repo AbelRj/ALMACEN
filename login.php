@@ -19,7 +19,7 @@ if ($_POST) {
   // Verifica si se encontró el usuario en la base de datos
   if ($user) {
     // Usar password_verify para verificar la contraseña hasheada
-    if ($contrasenia === $user["password"]) {
+    if (password_verify($contrasenia, $user["password"])) {
       $_SESSION["usuario"] = $user["nombre_usuario"];
       $_SESSION["rol"] = $user["rol"]; // Guardar el rol del usuario en la sesión
       $_SESSION["fabrica_id"] = $user["fabrica_id"];

@@ -2,8 +2,10 @@
 include("../bd.php");
 
     $nombreyA = $_POST['nombreyapellidoU'];
+    $fechaU = $_POST['fechaU'];
     $nombreU = $_POST['nombreU'];
-    $passwordU = $_POST['passwordU'];
+    $passwordPlano = $_POST['passwordU'];
+$passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
     $emailU = $_POST['emailU'];
     $rolU = $_POST['rolU'];
     $fabrica_nombreU = $_POST['fabricaU'];
@@ -19,9 +21,10 @@ $idFabrica = $fabricaRow['id'] ?? null;
 if (isset($_POST['editar']) && isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $sentencia = $conexion->prepare("UPDATE usuarios SET nombre_apellido = :nombreyA, nombre_usuario = :nombre_usuario, 
-    password = :password, email = :email, rol = :rol, fabrica_id = :fabrica_id WHERE id = :id");
+    $sentencia = $conexion->prepare("UPDATE usuarios SET nombre_apellido = :nombreyA, fecha_nacimiento = :fecha_nacimiento, 
+    nombre_usuario = :nombre_usuario, password = :password, email = :email, rol = :rol, fabrica_id = :fabrica_id WHERE id = :id");
     $sentencia->bindParam(':nombreyA', $nombreyA);
+    $sentencia->bindParam(':fecha_nacimiento', $fechaU);
     $sentencia->bindParam(':nombre_usuario', $nombreU);
     $sentencia->bindParam(':password', $passwordU);
     $sentencia->bindParam(':email', $emailU);

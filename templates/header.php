@@ -14,6 +14,7 @@ include("bd.php");
 include("crudH/leer.php");
 include('crudM/leerM.php'); 
 include('crudU/leerU.php'); 
+include('crudF/leerF.php'); 
 
 ?>
 <!DOCTYPE html>
@@ -32,34 +33,36 @@ include('crudU/leerU.php');
 <header>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="index.php?fabrica="><img src="img/logo.png" width="60px" alt=""></a>
+    <a class="navbar-brand" href="index.php"><img src="img/logo.png" width="60px" alt=""></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
 <ul class="navbar-nav me-auto">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="index.php?fabrica=">Inicio</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="index.php?fabrica=almacén">Almacén</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="index.php?fabrica=tasa">Tasa</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="index.php?fabrica=copeinca">Copeinca</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="index.php?fabrica=hayduck">Hayduck</a>
+    <a class="nav-link " aria-current="page" href="index.php">Inicio</a>
   </li>
     <li class="nav-item">
-    <a class="nav-link" href="index.php?fabrica=otros">Otros</a>
+    <a class="nav-link " aria-current="page" href="listaHerramientas.php">Herramientas</a>
   </li>
+<?php foreach ($fabricas as $fabricaItem): ?>
+  <li class="nav-item">
+    <a class="nav-link" href="listaHerramientas.php?fabrica=<?= urlencode(strtolower($fabricaItem['nombre_fabrica'])) ?>">
+      <?= htmlspecialchars($fabricaItem['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
+    </a>
+  </li>
+<?php endforeach; ?>
+
 
   <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <li class="nav-item">
     <a class="nav-link" href="listaUsuarios.php">Usuarios</a>
+  </li>
+<?php  endif; ?>
+
+  <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+  <li class="nav-item">
+    <a class="nav-link" href="listaFabricas.php">Fabricas</a>
   </li>
 <?php  endif; ?>
 </ul>
@@ -87,12 +90,18 @@ include('crudU/leerU.php');
 $paginaActual = basename($_SERVER['PHP_SELF']);
 $titulo = 'Listado de herramientas';
 
-if ($paginaActual === 'proceso_envio.php') {
+if ($paginaActual === 'index.php') {
+    $titulo = 'Estadísticas';
+} elseif ($paginaActual === 'proceso_envio.php') {
     $titulo = 'Proceso de envío de herramientas';
-} elseif ($paginaActual === 'formulario.php') {
+} elseif ($paginaActual === 'formularioHerramienta.php') {
     $titulo = isset($_GET['id']) ? 'Editar herramienta' : 'Agregar herramienta';
 } elseif ($paginaActual === 'formularioUsuario.php') {
     $titulo = isset($_GET['id']) ? 'Editar usuario' : 'Agregar usuario';
+} elseif ($paginaActual === 'formularioFabrica.php') {
+    $titulo = isset($_GET['id']) ? 'Editar fábrica' : 'Agregar fábrica';
+} elseif ($paginaActual === 'listaFabricas.php') {
+    $titulo = 'Listado de fábricas';
 } elseif ($paginaActual === 'movimientos.php') {
     if (isset($_GET['id'])) {
         $titulo = 'Movimiento de herramienta';
@@ -103,9 +112,10 @@ if ($paginaActual === 'proceso_envio.php') {
     }
 } elseif ($paginaActual === 'listaUsuarios.php') {
     $titulo = 'Listado de usuarios';
-} elseif ($paginaActual === 'index.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
+} elseif ($paginaActual === 'listaHerramientas.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
     $titulo = 'Listado de herramientas - ' . ucfirst($_GET['fabrica']);
 }
+
 ?>
 
 <h2 class="mb-4 text-center"><?= $titulo ?></h2>
@@ -120,11 +130,19 @@ if (
 ) {
     echo '<a href="formularioUsuario.php"><button type="button" class="btn btn-dark">Agregar Usuario</button></a>';
 } elseif (
-    $paginaActual === 'index.php' &&
+   $paginaActual === 'listaHerramientas.php' &&
+    (!isset($_GET['fabrica']) || $_GET['fabrica'] === '') &&
     isset($_SESSION["rol"]) &&
     $_SESSION["rol"] === "administrador"
 ) {
-    echo '<a href="formulario.php"><button type="button" class="btn btn-dark">Agregar Herramienta</button></a>';
+    echo '<a href="formularioHerramienta.php"><button type="button" class="btn btn-dark">Agregar Herramienta</button></a>';
+} elseif (
+    $paginaActual === 'listaFabricas.php' &&
+    isset($_SESSION["rol"]) &&
+    $_SESSION["rol"] === "administrador"
+) {
+    echo '<a href="formularioFabrica.php"><button type="button" class="btn btn-dark">Agregar Fábrica</button></a>';
 }
 ?>
+
 

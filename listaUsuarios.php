@@ -9,6 +9,7 @@ include('bd.php');
     <thead class="table-dark text-center">
       <tr>
         <th>Nombre</th>
+        <th>Fecha de nacimiento</th>
         <th>Usuario</th>
         <th>Rol</th>
         <th>Email</th>
@@ -20,6 +21,11 @@ include('bd.php');
       <?php foreach ($usuarios as $usuario): ?>
       <tr>
         <td><?= htmlspecialchars($usuario['nombre_apellido'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
+<td>
+  <?= $usuario['fecha_nacimiento'] && $usuario['fecha_nacimiento'] !== '0000-00-00'
+      ? date('d-m-Y', strtotime($usuario['fecha_nacimiento']))
+      : '---'; ?>
+</td>
         <td><?= htmlspecialchars($usuario['nombre_usuario'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
         <td><?= htmlspecialchars($usuario['rol'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
         <td><?= htmlspecialchars($usuario['email'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>

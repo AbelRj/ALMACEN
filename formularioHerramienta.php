@@ -29,11 +29,14 @@ include('templates/header.php'); ?>
     <label for="inputState" class="form-label">Fabrica</label>
 <select class="form-select" name="fabricaH">
   <option>Seleccionar</option>
-  <?php foreach ($fabricas as $fabrica): ?>
+<?php foreach ($fabricas as $fabrica): ?>
+  <?php if (strtolower($fabrica['nombre_fabrica']) !== 'persona externa'): ?>
     <option <?= (isset($herramientaActual['nombre_fabrica']) && $fabrica['nombre_fabrica'] == $herramientaActual['nombre_fabrica']) ? 'selected' : '' ?>>
       <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
     </option>
-  <?php endforeach; ?>
+  <?php endif; ?>
+<?php endforeach; ?>
+
 </select>
   </div>
 
