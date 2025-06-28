@@ -5,21 +5,21 @@ include('templates/header.php'); ?>
   <div class="col-12">
     <label for="inputAddress" class="form-label">Nombre</label>
     <input type="text" class="form-control" name="nombreH" placeholder="Nombre de la herramienta"
-    value="<?= $herramientaActual['nombre_herramienta'] ?? '' ?>">
+    value="<?= $herramientaActual['nombre_herramienta'] ?? '' ?>" required>
   </div>
   <div class="col-12">
     <label for="inputAddress2" class="form-label">Descripción</label>
     <input type="text" class="form-control" name="descripcionH" placeholder="Descripción"
-    value="<?= $herramientaActual['descripcion'] ?? '' ?>">
+    value="<?= $herramientaActual['descripcion'] ?? '' ?>" required>
   </div>
   <div class="col-md-4">
     <label for="inputCity" class="form-label">Codigo</label>
     <input type="text" class="form-control" name="codigoH" placeholder="Codigo"
-    value="<?= $herramientaActual['codigo'] ?? '' ?>">
+    value="<?= $herramientaActual['codigo'] ?? '' ?>" required>
   </div>
     <div class="col-md-4">
     <label for="inputState" class="form-label">Estado</label>
- <select class="form-select" name="estadoH">
+ <select class="form-select" name="estadoH" required>
       <option <?= (!isset($herramientaActual['estado'])) ? 'selected' : '' ?>>Seleccionar</option>
       <option <?= (isset($herramientaActual['estado']) && $herramientaActual['estado'] == 'bueno') ? 'selected' : '' ?> value="bueno">Bueno</option>
       <option <?= (isset($herramientaActual['estado']) && $herramientaActual['estado'] == 'malo') ? 'selected' : '' ?> value="malo">Malo</option>
@@ -27,7 +27,7 @@ include('templates/header.php'); ?>
   </div>
   <div class="col-md-4">
     <label for="inputState" class="form-label">Fabrica</label>
-<select class="form-select" name="fabricaH">
+<select class="form-select" name="fabricaH" required>
   <option>Seleccionar</option>
 <?php foreach ($fabricas as $fabrica): ?>
   <?php if (strtolower($fabrica['nombre_fabrica']) !== 'persona externa'): ?>

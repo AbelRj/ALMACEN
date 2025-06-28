@@ -1,41 +1,7 @@
+
 <?php
-session_start();
-include("bd.php");
-
-if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] != null) {
-  header("Location: index.php");
-
-  exit();
-}
-if ($_POST) {
-  $usuario = $_POST["usuario"];
-  $contrasenia = $_POST["password"];
-
-  $sentencia =$conexion->prepare("SELECT * FROM usuarios WHERE nombre_usuario = :usuario LIMIT 1"); 
-  $sentencia->bindParam(":usuario", $usuario);
-  $sentencia->execute();
-  $user = $sentencia->fetch(PDO::FETCH_ASSOC);
-
-  // Verifica si se encontró el usuario en la base de datos
-  if ($user) {
-    // Usar password_verify para verificar la contraseña hasheada
-    if (password_verify($contrasenia, $user["password"])) {
-      $_SESSION["usuario"] = $user["nombre_usuario"];
-      $_SESSION["rol"] = $user["rol"]; // Guardar el rol del usuario en la sesión
-      $_SESSION["fabrica_id"] = $user["fabrica_id"];
-      header("Location: index.php");
-      exit();
-    }
-  }
-
-  // Si no se encontró el usuario o la contraseña no coincide
-  echo 'error'; // Devuelve 'error' si falló la autenticación.
-
-  exit();
-}
+session_start(); // ¡ESTO ES NECESARIO!
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -50,7 +16,7 @@ if ($_POST) {
   <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
     <img src="img/logo.png" alt="" class="p-5">
 
-    <form method="POST" action="login.php" >
+    <form method="POST" action="procesarSesion.php">
       <div class="mb-3">
         <label for="usuario" class="form-label">Usuario</label>
         <input type="text" class="form-control" id="usuario" name="usuario" required autocomplete="off">
@@ -68,7 +34,15 @@ if ($_POST) {
 
       <button type="submit" class="btn btn-light w-100">Entrar</button>
     </form>
-    <a href="restablecer.php">¿Se olvido su contraseña?</a>
+
+    <?php if (isset($_SESSION["error_login"])): ?>
+      <div class="alert alert-danger mt-3" role="alert">
+        <?= $_SESSION["error_login"]; ?>
+        <?php unset($_SESSION["error_login"]); ?>
+      </div>
+    <?php endif; ?>
+
+    <a href="restablecer.php" class="mt-2 d-block text-decoration-none">¿Se olvidó su contraseña?</a>
   </div>
 
   <script>
@@ -79,7 +53,6 @@ if ($_POST) {
     togglePassword.addEventListener("click", function () {
       const tipo = password.getAttribute("type") === "password" ? "text" : "password";
       password.setAttribute("type", tipo);
-      // Cambiar ícono
       icon.classList.toggle("bi-eye");
       icon.classList.toggle("bi-eye-slash");
     });
