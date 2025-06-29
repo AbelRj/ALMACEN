@@ -28,7 +28,6 @@ if ($_POST) {
 
     if ($user) {
       $token = bin2hex(random_bytes(50));
-
       $sql = "UPDATE usuarios SET token_reset = ? WHERE email = ?";
       $stmt = $conexion->prepare($sql);
       $stmt->bindParam(1, $token);
@@ -46,7 +45,6 @@ if ($_POST) {
 
       $mail->setFrom('tu_correo@gmail.com', 'El´enMoll');
       $mail->addAddress($email);
-
       $mail->isHTML(true);
       $mail->CharSet = 'UTF-8';
       $mail->Subject = 'Restablecimiento de contraseña';
@@ -56,7 +54,6 @@ if ($_POST) {
       $mail->Body = $correoBody;
 
       $mail->send();
-
       $success = 'Correo de restablecimiento enviado.';
     } else {
       $error = 'No se encontró ninguna cuenta asociada a este correo.';
@@ -69,21 +66,51 @@ if ($_POST) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EL´ENMOLL</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .reset-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .reset-card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (min-width: 576px) {
+      .reset-card {
+        max-width: 400px;
+        height: auto;
+        margin: auto;
+      }
+    }
+  </style>
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center" style="height: 100vh;">
+<body class="bg-light">
 
-  <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-    <img src="img/logo.png" alt="" class="p-5">
+  <div class="container-fluid reset-wrapper d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow reset-card mx-2">
+      <img src="img/logo.png" alt="" class="p-5">
 
-    <form method="POST">
-      <div class="mb-3">
-        <label for="email" class="form-label">Correo Electrónico</label>
-        <input type="email" class="form-control" id="email" name="email">
-      </div>
-      <button type="submit" class="btn btn-light w-100">Restablecer contraseña</button>
-    </form>
+      <form method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" id="email" name="email">
+        </div>
+        <button type="submit" class="btn btn-light w-100">Restablecer contraseña</button>
+      </form>
+    </div>
   </div>
 
   <!-- Modal de éxito -->
@@ -108,7 +135,7 @@ if ($_POST) {
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-light text-white">
-          <h5 class="modal-title text-black" >Error</h5>
+          <h5 class="modal-title text-black">Error</h5>
         </div>
         <div class="modal-body">
           <p><?= $error ?></p>

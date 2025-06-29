@@ -51,14 +51,37 @@ foreach ($datosEstado as $index => $fila) {
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Gráfico: Herramientas por Fábrica -->
-<div style="width: 80%; margin: auto; margin-bottom: 50px;">
-  <canvas id="graficoHerramientas"></canvas>
-</div>
+<!-- Estilos para altura responsive -->
+<style>
+  .grafico-canvas {
+    height: 300px;
+  }
 
-<!-- Gráfico: Herramientas por Estado (Circular) -->
-<div style="width: 50%; margin: auto;">
-  <canvas id="graficoEstadoCircular"></canvas>
+  @media (min-width: 768px) {
+    .grafico-canvas {
+      height: 500px;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="row justify-content-center">
+
+    <!-- Gráfico: Herramientas por Fábrica -->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <canvas id="graficoHerramientas" class="grafico-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Gráfico: Herramientas por Estado -->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <canvas id="graficoEstadoCircular" class="grafico-canvas"></canvas>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -84,6 +107,7 @@ new Chart(document.getElementById('graficoHerramientas').getContext('2d'), {
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       title: {
@@ -115,6 +139,7 @@ new Chart(document.getElementById('graficoEstadoCircular').getContext('2d'), {
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'bottom'

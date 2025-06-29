@@ -17,6 +17,7 @@ include('crudU/leerU.php');
 include('crudF/leerF.php'); 
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,6 +29,25 @@ include('crudF/leerF.php');
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <title>EL´ENMOLL</title>
+    <style>
+      @media (max-width: 576px) {
+  div.dataTables_filter {
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+  }
+
+  div.dataTables_filter input {
+    margin-top: 8px !important;
+    width: 100% !important;
+  }
+
+  div.dataTables_length {
+    text-align: left !important;
+  }
+}
+
+    </style>
   </head>
   <body>
 <header>
@@ -45,26 +65,30 @@ include('crudF/leerF.php');
     <li class="nav-item">
     <a class="nav-link " aria-current="page" href="listaHerramientas.php">Herramientas</a>
   </li>
-<?php foreach ($fabricas as $fabricaItem): ?>
-  <li class="nav-item">
-    <a class="nav-link" href="listaHerramientas.php?fabrica=<?= urlencode(strtolower($fabricaItem['nombre_fabrica'])) ?>">
-      <?= htmlspecialchars($fabricaItem['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
-    </a>
-  </li>
-<?php endforeach; ?>
+<!-- Menú desplegable de fábricas -->
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="dropdownFabricas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Empresas
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="dropdownFabricas">
+    <?php foreach ($fabricas as $fabricaItem): ?>
+      <?php if (strtolower($fabricaItem['nombre_fabrica']) !== 'persona externa'): ?>
+        <li>
+          <a class="dropdown-item" href="listaHerramientas.php?fabrica=<?= urlencode(strtolower($fabricaItem['nombre_fabrica'])) ?>">
+            <?= htmlspecialchars($fabricaItem['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
+          </a>
+        </li>
+      <?php endif; ?>
+    <?php endforeach; ?>
 
-
-  <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-  <li class="nav-item">
-    <a class="nav-link" href="listaUsuarios.php">Usuarios</a>
-  </li>
-<?php  endif; ?>
-
-  <?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-  <li class="nav-item">
-    <a class="nav-link" href="listaFabricas.php">Fabricas</a>
-  </li>
-<?php  endif; ?>
+    <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+      <li><hr class="dropdown-divider"></li>
+      <li>
+        <a class="dropdown-item" href="listaFabricas.php">Lista de Empresas</a>
+      </li>
+    <?php endif; ?>
+  </ul>
+</li>
 </ul>
 
 <ul class="navbar-nav ms-auto">
