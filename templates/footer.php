@@ -7,39 +7,30 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <!-- FixedColumns -->
+<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
 
 <script>
   $(document).ready(function () {
-    $('#tablaHerramientas').DataTable({
+    const opcionesComun = (idTabla, contenedorId) => ({
+      scrollX: true,
+      fixedColumns: {
+        leftColumns: 1
+      },
       language: {
         url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
       },
       pageLength: 5,
-      lengthMenu: [5, 10, 25, 50, 100]
+      lengthMenu: [5, 10, 25, 50, 100],
+      initComplete: function () {
+        document.getElementById(contenedorId).style.visibility = "visible";
+      }
     });
 
-     $('#tablaUsuarios').DataTable({
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-      },
-      pageLength: 5,
-      lengthMenu: [5, 10, 25, 50, 100]
-    });
-       $('#tablaFabricas').DataTable({
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-      },
-      pageLength: 5,
-      lengthMenu: [5, 10, 25, 50, 100]
-    });
-
-    $('#tablaMovimientos').DataTable({
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-      },
-      pageLength: 5,
-      lengthMenu: [5, 10, 25, 50, 100]
-    });
+    $('#tablaHerramientas').DataTable(opcionesComun('#tablaHerramientas', 'contenedorHerramientas'));
+    $('#tablaUsuarios').DataTable(opcionesComun('#tablaUsuarios', 'contenedorUsuarios'));
+    $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
+    $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
   });
 </script>
 

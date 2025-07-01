@@ -2,8 +2,8 @@
 include('templates/header.php');
 include('bd.php');
 ?>
-<div class="table-responsive">
-  <table id="tablaFabricas" class="table table-striped table-bordered">
+<div class="table-responsive" id="contenedorFabricas" style="visibility: hidden;">
+  <table id="tablaFabricas" class="table table-striped table-bordered nowrap" style="width:100%">
     <thead class="table-dark text-center">
       <tr>
         <th>Nombre</th>

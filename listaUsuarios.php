@@ -4,8 +4,8 @@ include('bd.php');
 
 
 ?>
-<div class="table-responsive">
-  <table id="tablaUsuarios" class="table table-striped table-bordered">
+<div class="table-responsive" id="contenedorUsuarios" style="visibility: hidden;">
+  <table id="tablaUsuarios" class="table table-striped table-bordered nowrap" style="width:100%">
     <thead class="table-dark text-center">
       <tr>
         <th>Nombre</th>

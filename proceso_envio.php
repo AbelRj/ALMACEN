@@ -1,8 +1,8 @@
 <?php include('templates/header.php'); ?>
 
   <!-- TABLA DE MOVIMIENTOS -->
-  <div class="table-responsive">
-    <table id="tablaMovimientos" class="table table-striped table-bordered">
+  <div class="table-responsive" id="contenedorMovimientos" style="visibility: hidden;">
+    <table id="tablaMovimientos" class="table table-striped table-bordered nowrap" style="width:100%">
       <thead class="table-dark text-center">
         <tr>
           <th>Herramienta</th>

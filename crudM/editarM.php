@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
         $nuevoDestinoId = $movimiento['destino'];
 
         // 2. Obtener el nombre del administrador
-        $usuarioAdmin = $_SESSION['usuario'] ?? 'Desconocido';
+        $usuarioAdmin = $_SESSION['nombre_apellido'] ?? 'Desconocido';
 
         // 3. Actualizar el movimiento (proceso + aprobado_por)
         $stmt = $conexion->prepare("

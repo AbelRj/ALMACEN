@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if ($user) {
     if (password_verify($contrasenia, $user["password"])) {
       $_SESSION["usuario"] = $user["nombre_usuario"];
+      $_SESSION["nombre_apellido"] = $user["nombre_apellido"];
       $_SESSION["rol"] = $user["rol"];
       $_SESSION["fabrica_id"] = $user["fabrica_id"];
       header("Location: index.php");

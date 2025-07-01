@@ -26,6 +26,7 @@ include('crudF/leerF.php');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
         <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <title>EL´ENMOLL</title>
@@ -46,8 +47,20 @@ include('crudF/leerF.php');
     text-align: left !important;
   }
 }
+  /* Estilo para mantener encabezados oscuros también en columnas fijas */
+  .dataTables_wrapper .dataTable th {
+    background-color: #212529 !important;  /* Color de Bootstrap .table-dark */
+    color: #fff !important;
+    border-color: #32383e !important;
+  }
 
-    </style>
+  /* Opcional: bordes más suaves entre filas */
+  .dataTable td, .dataTable th {
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+</style>
+
   </head>
   <body>
 <header>
@@ -72,13 +85,11 @@ include('crudF/leerF.php');
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownFabricas">
     <?php foreach ($fabricas as $fabricaItem): ?>
-      <?php if (strtolower($fabricaItem['nombre_fabrica']) !== 'persona externa'): ?>
         <li>
           <a class="dropdown-item" href="listaHerramientas.php?fabrica=<?= urlencode(strtolower($fabricaItem['nombre_fabrica'])) ?>">
             <?= htmlspecialchars($fabricaItem['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
           </a>
         </li>
-      <?php endif; ?>
     <?php endforeach; ?>
 
     <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
@@ -89,15 +100,19 @@ include('crudF/leerF.php');
     <?php endif; ?>
   </ul>
 </li>
+<?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+    <li class="nav-item">
+    <a class="nav-link " aria-current="page" href="listaUsuarios.php">Usuarios</a>
+  </li>
+   <?php endif; ?>
 </ul>
 
 <ul class="navbar-nav ms-auto">
 
-<?php  if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
   <li class="nav-item">
     <a class="nav-link" href="proceso_envio.php">Proceso de envío |</a>
   </li>
-<?php  endif; ?>
+
 
   <li class="nav-item me-4">
     <a class="nav-link" href="./cerrarSesion.php" title="Cerrar sesión">

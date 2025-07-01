@@ -37,7 +37,7 @@ if (!$esMismoDestino || ($esMismoDestino && $esOtros && !empty($enviadoA))) {
     $esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
 
     if ($esAdmin) {
-        $usuarioAdmin = $_SESSION['usuario'];
+        $usuarioAdmin = $_SESSION['nombre_apellido'];
 
         $stmtMovimiento = $conexion->prepare("
             INSERT INTO movimientos (herramienta_id, origen, destino, persona_destino, fecha_envio, proceso, aprobado_por)
