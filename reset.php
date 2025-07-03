@@ -72,7 +72,7 @@ if (isset($_GET['token'])) {
   </div>
 
   <!-- Modal Éxito -->
-  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header bg-light text-black">
@@ -90,7 +90,7 @@ if (isset($_GET['token'])) {
   </div>
 
   <!-- Modal Error -->
-  <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header bg-light text-black">

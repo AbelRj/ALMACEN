@@ -15,7 +15,7 @@ include('templates/header.php'); ?>
       value="<?= $herramientaActual['codigo'] ?? '' ?>">
   </div>
 
-    <div class="col-sm-1">
+    <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Estado</label>
     <select class="form-select" name="estadoH">
       <option <?= (isset($herramientaActual['estado']) && $herramientaActual['estado'] == 'bueno') ? 'selected' : '' ?> value="bueno">Bueno</option>
@@ -50,12 +50,12 @@ include('templates/header.php'); ?>
 
 
 <?php
-$valorProceso = 'pendiente'; // Valor por defecto
-if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
+$valorProceso ='pendiente'; // Valor por defecto
+//if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
 ?>
-<div class="col-sm-1">
+<div class="col-sm-2">
   <label for="proceso" class="form-label">Proceso</label>
-  <input type="text" class="form-control" name="proceso" value="<?= $valorProceso ?>" readonly>
+  <input type="text" class="form-control" name="proceso" value="<?=$valorProceso?>" readonly>
 </div>
 
 

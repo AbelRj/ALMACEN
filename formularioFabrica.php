@@ -17,6 +17,7 @@ include('templates/header.php'); ?>
         <button type="submit" class="btn btn-primary" name="<?= $esEdicion ? 'editar' : 'agregar' ?>">
       <?= $esEdicion ? 'Actualizar' : 'Agregar' ?>
     </button>
+    <a href="listaFabricas.php" class="btn btn-secondary">Cancelar</a>
   </div>
 </form>
 <?php include('templates/footer.php'); ?>

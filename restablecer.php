@@ -114,7 +114,7 @@ if ($_POST) {
   </div>
 
   <!-- Modal de éxito -->
-  <div class="modal fade" id="successModal" tabindex="-1">
+  <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-light text-white">

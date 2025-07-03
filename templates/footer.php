@@ -1,4 +1,32 @@
     </div>
+ <script>
+    const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectDestino = document.querySelector('[name="destino_id"]');
+    const campoEnviadoA = document.getElementById('campoEnviadoA');
+    const inputProceso = document.querySelector('[name="proceso"]');
+
+    selectDestino.addEventListener('change', function () {
+      const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
+
+      if (textoSeleccionado === 'persona externa') {
+        campoEnviadoA.style.display = 'block';
+
+        if (ROL_USUARIO === 'administrador') {
+          inputProceso.value = 'enviado';
+        } else {
+          inputProceso.value = 'pendiente';
+        }
+
+      } else {
+        campoEnviadoA.style.display = 'none';
+        inputProceso.value = 'pendiente';
+      }
+    });
+  });
+</script>
+
+
 
     <!-- jQuery (requerido por DataTables) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,5 +1,10 @@
 <?php
 session_start(); // ¡ESTO ES NECESARIO!
+// Si ya hay sesión iniciada, redirigir al index
+if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
+  header("Location: index.php");
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
