@@ -15,6 +15,9 @@ if (isset($_POST['editar']) && isset($_GET['id'])) {
 
     if ($stmt->execute()) {
         echo "<script>alert('Fábrica actualizada correctamente'); window.location.href='../listaFabricas.php';</script>";
+
+        header("Location: ../listaFabricas.php?editado=ok");
+        exit();
     } else {
         echo "<script>alert('Error al actualizar la fábrica');</script>";
     }

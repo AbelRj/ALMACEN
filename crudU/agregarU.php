@@ -35,7 +35,8 @@ $passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
         $insert->bindParam(':fabrica_id', $id_fabrica);
         $insert->execute();
 
-        echo "<script>alert('Usuario creado con éxito'); window.location.href='../listaUsuarios.php';</script>";
+header("Location: ../listaUsuarios.php?guardado=ok");
+exit();
     } else {
         echo "<script>alert('Error: Fábrica no encontrada');</script>";
     }

@@ -91,7 +91,7 @@
 <div class="modal fade" id="modalExito" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-success text-white">
+      <div class="modal-header bg-light">
         <h5 class="modal-title">¡Proceso exitoso!</h5>
       </div>
       <div class="modal-body">

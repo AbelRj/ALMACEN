@@ -15,7 +15,8 @@ if (isset($_POST['agregar'])) {
         $insertar->bindParam(':lugar', $lugarF);
         $insertar->execute();
 
-        echo "<script>alert('Fábrica agregada correctamente'); window.location.href='../listaFabricas.php';</script>";
+        header("Location: ../listaFabricas.php?guardado=ok");
+        exit();
     } else {
         echo "<script>alert('Por favor, complete todos los campos'); window.history.back();</script>";
     }

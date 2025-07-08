@@ -51,10 +51,60 @@ include('templates/header.php'); ?>
   </div>
 
   <div class="col-12">
-        <button type="submit" class="btn btn-primary" name="<?= $esEdicion ? 'editar' : 'agregar' ?>">
+        <button type="submit" class="btn btn-primary" name="<?= $esEdicion ? 'editar' : 'agregar' ?>" value="1">
       <?= $esEdicion ? 'Actualizar' : 'Agregar' ?>
     </button>
     <a href="listaUsuarios.php" class="btn btn-secondary">Cancelar</a>
   </div>
 </form>
+
+
+<!-- Modal de advertencia -->
+<div class="modal fade" id="modalError" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Atención</h5>
+      </div>
+      <div class="modal-body">
+        Faltan datos por completar del usuario. Por favor, revisa todos los campos.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include('templates/footer.php'); ?>
+
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+  const nombreyA = document.querySelector('input[name="nombreyapellidoU"]').value.trim();
+  const fechaU = document.querySelector('input[name="fechaU"]').value.trim();
+  const nombreU = document.querySelector('input[name="nombreU"]').value.trim();
+  const passwordU = document.querySelector('input[name="passwordU"]').value.trim();
+  const emailU = document.querySelector('input[name="emailU"]').value.trim();
+  const fabricaU = document.querySelector('select[name="fabricaU"]').value;
+  const rolU = document.querySelector('select[name="rolU"]').value;
+
+  const esEdicion = <?= $esEdicion ? 'true' : 'false' ?>;
+
+  const faltaPassword = !passwordU && !esEdicion;
+
+  if (
+    !nombreyA ||
+    !fechaU ||
+    !nombreU ||
+    faltaPassword ||
+    !emailU ||
+    fabricaU === "Seleccionar" ||
+    rolU === "Seleccionar"
+  ) {
+    e.preventDefault();
+    const modal = new bootstrap.Modal(document.getElementById('modalError'));
+    modal.show();
+  }
+});
+
+</script>

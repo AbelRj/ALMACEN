@@ -4,15 +4,22 @@ include("../bd.php");
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Eliminar la herramienta por su ID
-    $sentencia = $conexion->prepare("DELETE FROM fabricas WHERE id = :id");
-    $sentencia->bindParam(':id', $id);
-    $sentencia->execute();
+    try {
+        $sentencia = $conexion->prepare("DELETE FROM fabricas WHERE id = :id");
+        $sentencia->bindParam(':id', $id);
+        $sentencia->execute();
 
-    // Redirigir de vuelta al listado
-    header("Location: ../listaFabricas.php");
-    exit();
+        header("Location: ../listaFabricas.php?eliminado=ok");
+        exit();
+    } catch (PDOException $e) {
+        // Si el error es por restricción de clave foránea
+        if ($e->getCode() === '23000') {
+            header("Location: ../listaFabricas.php?error=dependencias");
+            exit();
+        } else {
+            echo "Error inesperado: " . $e->getMessage();
+        }
+    }
 } else {
     echo "ID no proporcionado.";
 }
-?>

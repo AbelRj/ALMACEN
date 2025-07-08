@@ -45,7 +45,7 @@ if (isset($_POST['editar']) && isset($_GET['id'])) {
     $sentencia->execute();
 
     // Redirigir luego de editar
-    header("Location: ../listaUsuarios.php");
+    header("Location: ../listaUsuarios.php?editado=ok");
     exit();
 }
 ?>

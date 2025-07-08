@@ -56,7 +56,7 @@ include('templates/header.php'); ?>
 <div class="modal fade" id="modalError" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-warning">
+      <div class="modal-header bg-light">
         <h5 class="modal-title">Atención</h5>
       </div>
       <div class="modal-body">

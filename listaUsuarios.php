@@ -70,6 +70,42 @@ include('bd.php');
 </div>
 
 
+
+
+<?php if (isset($_GET['guardado']) || isset($_GET['editado'])): ?>
+<!-- Modal de éxito -->
+<div class="modal fade" id="modalExito" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">¡Proceso exitoso!</h5>
+      </div>
+      <div class="modal-body">
+        <?= isset($_GET['guardado']) ? 'La usuario ha sido registrada correctamente.' : 'La usuario ha sido actualizada correctamente.' ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="cerrarModal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const modal = new bootstrap.Modal(document.getElementById('modalExito'));
+    modal.show();
+
+    // Cuando se cierra el modal, limpiamos los parámetros de la URL
+    document.getElementById('cerrarModal').addEventListener('click', () => {
+      const url = new URL(window.location.href);
+      url.search = ''; // Elimina los parámetros
+      window.history.replaceState({}, document.title, url);
+    });
+  });
+</script>
+<?php endif; ?>
+
+
 <?php include('templates/footer.php'); ?>
 
 
