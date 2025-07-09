@@ -1,9 +1,9 @@
 <?php
 include("../bd.php");
 
-    $nombreyA = $_POST['nombreyapellidoU'];
-    $fechaU = $_POST['fechaU'];
-    $nombreU = $_POST['nombreU'];
+$nombreyA = $_POST['nombreyapellidoU'];
+$fechaU = $_POST['fechaU'];
+$nombreU = $_POST['nombreU'];
 $passwordPlano = $_POST['passwordU'];
 
 if (!empty($passwordPlano)) {
@@ -17,9 +17,9 @@ if (!empty($passwordPlano)) {
     $passwordU = $stmt->fetchColumn();
 }
 
-    $emailU = $_POST['emailU'];
-    $rolU = $_POST['rolU'];
-    $fabrica_nombreU = $_POST['fabricaU'];
+$emailU = $_POST['emailU'];
+$rolU = $_POST['rolU'];
+$fabrica_nombreU = $_POST['fabricaU'];
 
 // Buscar ID de la fábrica
 $buscarFabrica = $conexion->prepare("SELECT id FROM fabricas WHERE nombre_fabrica = :nombre");
@@ -45,7 +45,6 @@ if (isset($_POST['editar']) && isset($_GET['id'])) {
     $sentencia->execute();
 
     // Redirigir luego de editar
-    header("Location: ../listaUsuarios.php?editado=ok");
+    header("Location: ../listaUsuarios.php?editado=ok&tipo=usuario");
     exit();
 }
-?>

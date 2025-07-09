@@ -1,49 +1,49 @@
-<?php 
+<?php
 include('templates/header.php'); ?>
-    
-        <form class="row g-3" method="POST"  action="<?= $esEdicion ? 'crudU/editarU.php?id=' . $idEditar : 'crudU/agregarU.php' ?>">
+
+<form class="row g-3" method="POST" action="<?= $esEdicion ? 'crudU/editarU.php?id=' . $idEditar : 'crudU/agregarU.php' ?>">
   <div class="col-12">
     <label for="inputAddress" class="form-label">Nombre y Apellido</label>
     <input type="text" class="form-control" name="nombreyapellidoU" placeholder="Nombre y apellido"
-    value="<?= $usuarioActual['nombre_apellido'] ?? '' ?>">
+      value="<?= $usuarioActual['nombre_apellido'] ?? '' ?>">
   </div>
-   <div class="col-12">
+  <div class="col-12">
     <label for="inputAddress" class="form-label">Fecha de nacimiento</label>
-    <input type="date" class="form-control" name="fechaU" 
-    value="<?= $usuarioActual['fecha_nacimiento'] ?? '' ?>">
+    <input type="date" class="form-control" name="fechaU"
+      value="<?= $usuarioActual['fecha_nacimiento'] ?? '' ?>">
   </div>
   <div class="col-12">
     <label for="inputAddress2" class="form-label">Nombre de Usuario</label>
     <input type="text" class="form-control" name="nombreU" placeholder="Nombre de usuario"
-    value="<?= $usuarioActual['nombre_usuario'] ?? '' ?>">
+      value="<?= $usuarioActual['nombre_usuario'] ?? '' ?>">
   </div>
   <div class="col-md-12">
     <label for="inputCity" class="form-label">Contraseña</label>
-<input type="password" class="form-control" name="passwordU" placeholder="Dejar en blanco para mantener contraseña actual">
+    <input type="password" class="form-control" name="passwordU" placeholder="Dejar en blanco para mantener contraseña actual">
 
   </div>
-    <div class="col-md-12">
+  <div class="col-md-12">
     <label for="inputCity" class="form-label">Correo Electronico</label>
     <input type="text" class="form-control" name="emailU" placeholder="Correo electrónico"
-    value="<?= $usuarioActual['email'] ?? '' ?>">
+      value="<?= $usuarioActual['email'] ?? '' ?>">
   </div>
   <div class="col-md-4">
     <label for="inputState" class="form-label">Fabrica</label>
-<select class="form-select" name="fabricaU">
-  <option>Seleccionar</option>
-<?php foreach ($fabricas as $fabrica): ?>
-  <?php if (strtolower($fabrica['nombre_fabrica']) !== 'persona externa'): ?>
-    <option <?= (isset($usuarioActual['nombre_fabrica']) && $fabrica['nombre_fabrica'] == $usuarioActual['nombre_fabrica']) ? 'selected' : '' ?>>
-      <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
-    </option>
-  <?php endif; ?>
-<?php endforeach; ?>
+    <select class="form-select" name="fabricaU">
+      <option>Seleccionar</option>
+      <?php foreach ($fabricas as $fabrica): ?>
+        <?php if (strtolower($fabrica['nombre_fabrica']) !== 'persona externa'): ?>
+          <option <?= (isset($usuarioActual['nombre_fabrica']) && $fabrica['nombre_fabrica'] == $usuarioActual['nombre_fabrica']) ? 'selected' : '' ?>>
+            <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
+          </option>
+        <?php endif; ?>
+      <?php endforeach; ?>
 
-</select>
+    </select>
   </div>
-    <div class="col-md-4">
+  <div class="col-md-4">
     <label for="inputState" class="form-label">Rol</label>
- <select class="form-select" name="rolU">
+    <select class="form-select" name="rolU">
       <option <?= (!isset($usuarioActual['rol'])) ? 'selected' : '' ?>>Seleccionar</option>
       <option <?= (isset($usuarioActual['rol']) && $usuarioActual['rol'] == 'supervisor') ? 'selected' : '' ?> value="supervisor">Supervisor</option>
       <option <?= (isset($usuarioActual['rol']) && $usuarioActual['rol'] == 'administrador') ? 'selected' : '' ?> value="administrador">Administrador</option>
@@ -51,7 +51,7 @@ include('templates/header.php'); ?>
   </div>
 
   <div class="col-12">
-        <button type="submit" class="btn btn-primary" name="<?= $esEdicion ? 'editar' : 'agregar' ?>" value="1">
+    <button type="submit" class="btn btn-primary" name="<?= $esEdicion ? 'editar' : 'agregar' ?>" value="1">
       <?= $esEdicion ? 'Actualizar' : 'Agregar' ?>
     </button>
     <a href="listaUsuarios.php" class="btn btn-secondary">Cancelar</a>
@@ -60,51 +60,36 @@ include('templates/header.php'); ?>
 
 
 <!-- Modal de advertencia -->
-<div class="modal fade" id="modalError" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title">Atención</h5>
-      </div>
-      <div class="modal-body">
-        Faltan datos por completar del usuario. Por favor, revisa todos los campos.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+<?php include("modal/modalAdvertencia.php"); ?>
 <?php include('templates/footer.php'); ?>
 
 
 <script>
-document.querySelector("form").addEventListener("submit", function(e) {
-  const nombreyA = document.querySelector('input[name="nombreyapellidoU"]').value.trim();
-  const fechaU = document.querySelector('input[name="fechaU"]').value.trim();
-  const nombreU = document.querySelector('input[name="nombreU"]').value.trim();
-  const passwordU = document.querySelector('input[name="passwordU"]').value.trim();
-  const emailU = document.querySelector('input[name="emailU"]').value.trim();
-  const fabricaU = document.querySelector('select[name="fabricaU"]').value;
-  const rolU = document.querySelector('select[name="rolU"]').value;
+  document.querySelector("form").addEventListener("submit", function(e) {
+    const nombreyA = document.querySelector('input[name="nombreyapellidoU"]').value.trim();
+    const fechaU = document.querySelector('input[name="fechaU"]').value.trim();
+    const nombreU = document.querySelector('input[name="nombreU"]').value.trim();
+    const passwordU = document.querySelector('input[name="passwordU"]').value.trim();
+    const emailU = document.querySelector('input[name="emailU"]').value.trim();
+    const fabricaU = document.querySelector('select[name="fabricaU"]').value;
+    const rolU = document.querySelector('select[name="rolU"]').value;
 
-  const esEdicion = <?= $esEdicion ? 'true' : 'false' ?>;
+    const esEdicion = <?= $esEdicion ? 'true' : 'false' ?>;
 
-  const faltaPassword = !passwordU && !esEdicion;
+    const faltaPassword = !passwordU && !esEdicion;
 
-  if (
-    !nombreyA ||
-    !fechaU ||
-    !nombreU ||
-    faltaPassword ||
-    !emailU ||
-    fabricaU === "Seleccionar" ||
-    rolU === "Seleccionar"
-  ) {
-    e.preventDefault();
-    const modal = new bootstrap.Modal(document.getElementById('modalError'));
-    modal.show();
-  }
-});
-
+    if (
+      !nombreyA ||
+      !fechaU ||
+      !nombreU ||
+      faltaPassword ||
+      !emailU ||
+      fabricaU === "Seleccionar" ||
+      rolU === "Seleccionar"
+    ) {
+      e.preventDefault();
+      const modal = new bootstrap.Modal(document.getElementById('modalError'));
+      modal.show();
+    }
+  });
 </script>

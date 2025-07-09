@@ -7,7 +7,7 @@ if (isset($_POST['agregar'])) {
     $fechaU = $_POST['fechaU'];
     $nombreU = $_POST['nombreU'];
     $passwordPlano = $_POST['passwordU'];
-$passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
+    $passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
     $emailU = $_POST['emailU'];
     $rolU = $_POST['rolU'];
     $fabrica_nombreU = $_POST['fabricaU'];
@@ -35,10 +35,9 @@ $passwordU = password_hash($passwordPlano, PASSWORD_DEFAULT);
         $insert->bindParam(':fabrica_id', $id_fabrica);
         $insert->execute();
 
-header("Location: ../listaUsuarios.php?guardado=ok");
-exit();
+        header("Location: ../listaUsuarios.php?guardado=ok&tipo=usuario");
+        exit();
     } else {
         echo "<script>alert('Error: Fábrica no encontrada');</script>";
     }
 }
-?>

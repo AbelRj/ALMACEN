@@ -1,6 +1,5 @@
-<?php 
-include('templates/header.php'); 
-include('bd.php');
+<?php
+include('templates/header.php');
 
 // Gráfico 1: Herramientas por fábrica
 $sentencia = $conexion->prepare("
@@ -51,18 +50,6 @@ foreach ($datosEstado as $index => $fila) {
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Estilos para altura responsive -->
-<style>
-  .grafico-canvas {
-    height: 300px;
-  }
-
-  @media (min-width: 768px) {
-    .grafico-canvas {
-      height: 500px;
-    }
-  }
-</style>
 
 <div class="container">
   <div class="row justify-content-center">
@@ -85,72 +72,76 @@ foreach ($datosEstado as $index => $fila) {
 </div>
 
 <script>
-// Gráfico de herramientas por fábrica
-new Chart(document.getElementById('graficoHerramientas').getContext('2d'), {
-  type: 'bar',
-  data: {
-    labels: <?= json_encode($nombresFabricas) ?>,
-    datasets: [{
-      label: 'Cantidad de Herramientas',
-      data: <?= json_encode($totales) ?>,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(255, 206, 86, 0.6)',
-        'rgba(75, 192, 192, 0.6)',
-        'rgba(153, 102, 255, 0.6)',
-        'rgba(255, 159, 64, 0.6)'
-      ],
-      borderColor: 'rgba(0,0,0,0.2)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'top' },
-      title: {
-        display: true,
-        text: 'Herramientas por Fábrica'
-      }
+  // Gráfico de herramientas por fábrica
+  new Chart(document.getElementById('graficoHerramientas').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: <?= json_encode($nombresFabricas) ?>,
+      datasets: [{
+        label: 'Cantidad de Herramientas',
+        data: <?= json_encode($totales) ?>,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)'
+        ],
+        borderColor: 'rgba(0,0,0,0.2)',
+        borderWidth: 1
+      }]
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { stepSize: 1 }
-      }
-    }
-  }
-});
-
-// Gráfico circular de herramientas por estado
-new Chart(document.getElementById('graficoEstadoCircular').getContext('2d'), {
-  type: 'pie',
-  data: {
-    labels: <?= json_encode($labelsEstado) ?>,
-    datasets: [{
-      label: 'Estado de Herramientas',
-      data: <?= json_encode($datosEstadoValores) ?>,
-      backgroundColor: <?= json_encode($coloresEstado) ?>,
-      borderColor: 'rgba(255, 255, 255, 1)',
-      borderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom'
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'Herramientas por Fábrica'
+        }
       },
-      title: {
-        display: true,
-        text: 'Distribución de Herramientas por Estado'
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
       }
     }
-  }
-});
+  });
+
+  // Gráfico circular de herramientas por estado
+  new Chart(document.getElementById('graficoEstadoCircular').getContext('2d'), {
+    type: 'pie',
+    data: {
+      labels: <?= json_encode($labelsEstado) ?>,
+      datasets: [{
+        label: 'Estado de Herramientas',
+        data: <?= json_encode($datosEstadoValores) ?>,
+        backgroundColor: <?= json_encode($coloresEstado) ?>,
+        borderColor: 'rgba(255, 255, 255, 1)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        title: {
+          display: true,
+          text: 'Distribución de Herramientas por Estado'
+        }
+      }
+    }
+  });
 </script>
 
 <?php include('templates/footer.php'); ?>

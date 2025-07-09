@@ -30,11 +30,11 @@ if (isset($_POST['agregar'])) {
         $insert->bindParam(':id_fabrica', $id_fabrica);
         $insert->execute();
 
-       header("Location: ../listaHerramientas.php?guardado=ok");
+        header("Location: ../listaHerramientas.php?guardado=ok&tipo=herramienta");
 
-exit();
+
+        exit();
     } else {
         echo "<script>alert('Error: Fábrica no encontrada');</script>";
     }
 }
-?>

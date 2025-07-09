@@ -14,5 +14,3 @@ if (isset($_GET['id'])) {
     $consulta->execute();
     $fabricaActual = $consulta->fetch(PDO::FETCH_ASSOC);
 }
-
-?>

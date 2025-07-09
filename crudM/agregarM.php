@@ -85,10 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
       $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
       $stmtEliminar->execute($idsAEliminar);
     }
+    header("Location: ../listaHerramientas.php?guardado=ok&tipo=movimiento");
 
-    echo "<script>alert('Herramienta movida correctamente'); window.location='../listaHerramientas.php';</script>";
+
+    exit();
   } else {
     echo "<script>alert('La fábrica de destino debe ser diferente a la de origen');</script>";
   }
 }
-?>

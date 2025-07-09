@@ -15,4 +15,3 @@ if (isset($_GET['id'])) {
 } else {
     echo "ID no proporcionado.";
 }
-?>

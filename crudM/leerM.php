@@ -37,6 +37,3 @@ if ($rol === 'supervisor' && $fabricaSesion) {
 }
 
 $movimientos = $sentenciaMov->fetchAll(PDO::FETCH_ASSOC);
-
-
-?>

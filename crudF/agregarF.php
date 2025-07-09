@@ -2,10 +2,10 @@
 include("../bd.php");
 
 if (isset($_POST['agregar'])) {
-   $nombreF = strtoupper($_POST['nombreF']);
+    $nombreF = strtoupper($_POST['nombreF']);
     $lugarF = $_POST['lugarF'];
 
-    
+
     if (!empty($nombreF) && !empty($lugarF)) {
         $insertar = $conexion->prepare("
             INSERT INTO fabricas (nombre_fabrica, lugar)
@@ -15,10 +15,9 @@ if (isset($_POST['agregar'])) {
         $insertar->bindParam(':lugar', $lugarF);
         $insertar->execute();
 
-        header("Location: ../listaFabricas.php?guardado=ok");
+        header("Location: ../listaFabricas.php?guardado=ok&tipo=fabrica");
         exit();
     } else {
         echo "<script>alert('Por favor, complete todos los campos'); window.history.back();</script>";
     }
 }
-?>

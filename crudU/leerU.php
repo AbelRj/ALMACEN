@@ -5,27 +5,25 @@ $sentenciaUsuario = $conexion->prepare("
     FROM usuarios u
     LEFT JOIN fabricas f ON u.fabrica_id = f.id
 ");
-$sentenciaUsuario->execute(); 
+$sentenciaUsuario->execute();
 $usuarios = $sentenciaUsuario->fetchAll(PDO::FETCH_ASSOC);
 
 
 /*TRAER DATOS MEDIANTE EL ID DEL USUARIO*/
-      $esEdicion = false;
-      $usuarioActual = null;
+$esEdicion = false;
+$usuarioActual = null;
 
-            if (isset($_GET['id'])) {
-          $esEdicion = true;
-          $idEditar = $_GET['id'];
+if (isset($_GET['id'])) {
+    $esEdicion = true;
+    $idEditar = $_GET['id'];
 
-          $consulta = $conexion->prepare("
+    $consulta = $conexion->prepare("
               SELECT u.*, f.nombre_fabrica 
               FROM usuarios u 
               JOIN fabricas f ON u.fabrica_id = f.id 
               WHERE u.id = :id
           ");
-          $consulta->bindParam(':id', $idEditar);
-          $consulta->execute();
-          $usuarioActual = $consulta->fetch(PDO::FETCH_ASSOC);
-      }
-
-?>
+    $consulta->bindParam(':id', $idEditar);
+    $consulta->execute();
+    $usuarioActual = $consulta->fetch(PDO::FETCH_ASSOC);
+}

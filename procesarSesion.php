@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $usuario = $_POST["usuario"];
   $contrasenia = $_POST["password"];
 
-  $sentencia = $conexion->prepare("SELECT * FROM usuarios WHERE nombre_usuario = :usuario LIMIT 1"); 
+  $sentencia = $conexion->prepare("SELECT * FROM usuarios WHERE nombre_usuario = :usuario LIMIT 1");
   $sentencia->bindParam(":usuario", $usuario);
   $sentencia->execute();
   $user = $sentencia->fetch(PDO::FETCH_ASSOC);
@@ -37,4 +37,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   header("Location: login.php");
   exit();
 }
-?>

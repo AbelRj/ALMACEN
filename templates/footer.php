@@ -1,30 +1,30 @@
     </div>
- <script>
-    const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
-  document.addEventListener('DOMContentLoaded', function () {
-    const selectDestino = document.querySelector('[name="destino_id"]');
-    const campoEnviadoA = document.getElementById('campoEnviadoA');
-    const inputProceso = document.querySelector('[name="proceso"]');
+    <script>
+      const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
+      document.addEventListener('DOMContentLoaded', function() {
+        const selectDestino = document.querySelector('[name="destino_id"]');
+        const campoEnviadoA = document.getElementById('campoEnviadoA');
+        const inputProceso = document.querySelector('[name="proceso"]');
 
-    selectDestino.addEventListener('change', function () {
-      const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
+        selectDestino.addEventListener('change', function() {
+          const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
 
-      if (textoSeleccionado === 'persona externa') {
-        campoEnviadoA.style.display = 'block';
+          if (textoSeleccionado === 'persona externa') {
+            campoEnviadoA.style.display = 'block';
 
-        if (ROL_USUARIO === 'administrador') {
-          inputProceso.value = 'enviado';
-        } else {
-          inputProceso.value = 'pendiente';
-        }
+            if (ROL_USUARIO === 'administrador') {
+              inputProceso.value = 'enviado';
+            } else {
+              inputProceso.value = 'pendiente';
+            }
 
-      } else {
-        campoEnviadoA.style.display = 'none';
-        inputProceso.value = 'pendiente';
-      }
-    });
-  });
-</script>
+          } else {
+            campoEnviadoA.style.display = 'none';
+            inputProceso.value = 'pendiente';
+          }
+        });
+      });
+    </script>
 
 
 
@@ -36,38 +36,39 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <!-- FixedColumns -->
-<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
 
-<script>
-  $(document).ready(function () {
-    const opcionesComun = (idTabla, contenedorId) => ({
-      scrollX: true,
-      fixedColumns: {
-        leftColumns: 1
-      },
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-      },
-      pageLength: 5,
-      lengthMenu: [5, 10, 25, 50, 100],
-      initComplete: function () {
-        document.getElementById(contenedorId).style.visibility = "visible";
-      }
-    });
+    <script>
+      $(document).ready(function() {
+        const opcionesComun = (idTabla, contenedorId) => ({
+          scrollX: true,
+          fixedColumns: {
+            leftColumns: 1
+          },
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+          },
+          pageLength: 5,
+          lengthMenu: [5, 10, 25, 50, 100],
+          initComplete: function() {
+            document.getElementById(contenedorId).style.visibility = "visible";
+          }
+        });
 
-    $('#tablaHerramientas').DataTable(opcionesComun('#tablaHerramientas', 'contenedorHerramientas'));
-    $('#tablaUsuarios').DataTable(opcionesComun('#tablaUsuarios', 'contenedorUsuarios'));
-    $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
-    $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
-  });
-</script>
+        $('#tablaHerramientas').DataTable(opcionesComun('#tablaHerramientas', 'contenedorHerramientas'));
+        $('#tablaUsuarios').DataTable(opcionesComun('#tablaUsuarios', 'contenedorUsuarios'));
+        $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
+        $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
+      });
+    </script>
 
 
-<script>
-document.querySelector('[name="destino_id"]').addEventListener('change', function () {
-  const valor = this.options[this.selectedIndex].text.toLowerCase();
-  document.getElementById('campoEnviadoA').style.display = valor === 'persona externa' ? 'block' : 'none';
-});
-</script>
-  </body>
-</html>
+    <script>
+      document.querySelector('[name="destino_id"]').addEventListener('change', function() {
+        const valor = this.options[this.selectedIndex].text.toLowerCase();
+        document.getElementById('campoEnviadoA').style.display = valor === 'persona externa' ? 'block' : 'none';
+      });
+    </script>
+    </body>
+
+    </html>

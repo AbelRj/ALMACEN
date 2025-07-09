@@ -57,7 +57,7 @@ if (isset($_GET['id'])) {
         }
 
         // 6. Redirigir
-        header("Location: ../index.php?proceso=1");
+        header("Location: ../proceso_envio.php?editado=ok&tipo=enviado");
         exit();
     } else {
         echo "Movimiento no encontrado.";
@@ -65,4 +65,3 @@ if (isset($_GET['id'])) {
 } else {
     echo "ID no proporcionado.";
 }
-?>

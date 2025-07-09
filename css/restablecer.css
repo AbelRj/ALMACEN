@@ -1,0 +1,26 @@
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .reset-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .reset-card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (min-width: 576px) {
+      .reset-card {
+        max-width: 400px;
+        height: auto;
+        margin: auto;
+      }
+    }

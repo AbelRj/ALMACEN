@@ -1,7 +1,7 @@
-<?php 
+<?php
 include('templates/header.php'); ?>
 
-<form class="row gx-3 gy-3 m-0"  method="POST" action="crudM/agregarM.php">
+<form class="row gx-3 gy-3 m-0" method="POST" action="crudM/agregarM.php">
   <input type="hidden" name="id_herramienta" value="<?= $herramientaActual['id'] ?? '' ?>">
   <div class="col-sm-2">
     <label for="nombreHerramienta" class="form-label">Nombre:</label>
@@ -15,7 +15,7 @@ include('templates/header.php'); ?>
       value="<?= $herramientaActual['codigo'] ?? '' ?>">
   </div>
 
-    <div class="col-sm-2">
+  <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Estado</label>
     <select class="form-select" name="estadoH">
       <option <?= (isset($herramientaActual['estado']) && $herramientaActual['estado'] == 'bueno') ? 'selected' : '' ?> value="bueno">Bueno</option>
@@ -25,21 +25,21 @@ include('templates/header.php'); ?>
 
   <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Origen:</label>
-    <input type="text" class="form-control" id="origenHerramienta" placeholder="Origen" 
+    <input type="text" class="form-control" id="origenHerramienta" placeholder="Origen"
       value="<?= $herramientaActual['nombre_fabrica'] ?? '' ?>">
     <input type="hidden" name="origen" value="<?= $herramientaActual['id_fabrica'] ?? '' ?>">
   </div>
 
   <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Destino:</label>
-      <select class="form-select" name="destino_id" required>
+    <select class="form-select" name="destino_id" required>
       <option>Seleccionar</option>
       <?php foreach ($fabricas as $fabrica): ?>
-      <option value="<?= $fabrica['id'] ?>">
-      <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
-      </option>
-     <?php endforeach; ?>
-      </select>
+        <option value="<?= $fabrica['id'] ?>">
+          <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
   </div>
 
 
@@ -49,27 +49,27 @@ include('templates/header.php'); ?>
   </div>
 
 
-<?php
-$valorProceso ='pendiente'; // Valor por defecto
-//if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
-?>
-<div class="col-sm-2">
-  <label for="proceso" class="form-label">Proceso</label>
-  <input type="text" class="form-control" name="proceso" value="<?=$valorProceso?>" readonly>
-</div>
+  <?php
+  $valorProceso = 'pendiente'; // Valor por defecto
+  //if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') { $valorProceso = 'enviado';}
+  ?>
+  <div class="col-sm-2">
+    <label for="proceso" class="form-label">Proceso</label>
+    <input type="text" class="form-control" name="proceso" value="<?= $valorProceso ?>" readonly>
+  </div>
 
 
-<div class="col-12 text-center">
+  <div class="col-12 text-center">
     <button type="submit" class="btn btn-primary mt-2" name="mover">Enviar</button>
-</div>
+  </div>
 </form>
 
 
- <?php
+<?php
 if (isset($herramientaActual['id'])) {
-    $idHerramienta = $herramientaActual['id'];
+  $idHerramienta = $herramientaActual['id'];
 
-$stmtMovimientos = $conexion->prepare("
+  $stmtMovimientos = $conexion->prepare("
     SELECT 
         m.*, 
         h.nombre_herramienta,
@@ -82,54 +82,54 @@ $stmtMovimientos = $conexion->prepare("
     WHERE m.herramienta_id = :id
     ORDER BY m.fecha_envio DESC
 ");
-    $stmtMovimientos->execute([':id' => $idHerramienta]);
-    $movimientosHerramienta = $stmtMovimientos->fetchAll(PDO::FETCH_ASSOC);
+  $stmtMovimientos->execute([':id' => $idHerramienta]);
+  $movimientosHerramienta = $stmtMovimientos->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($movimientosHerramienta):
+  if ($movimientosHerramienta):
 ?>
-<hr>
-<h5 class="mt-4">Historial de Movimientos de la Herramienta: <?= htmlspecialchars($herramientaActual['nombre_herramienta'] ?? '') ?></h5>
-<div class="table-responsive">
-  <table class="table table-bordered table-striped table-sm">
-    <thead class="table-dark text-center">
-      <tr>
-        <th>Herramienta</th>
-        <th>Origen</th>
-        <th>Destino</th>
-        <th>Fecha de Envío</th>
-        <th>Aprobado por</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($movimientosHerramienta as $mov): ?>
-      <tr>
-        <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '---') ?></td>
-        <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---') ?></td>
-        <td>
-    <?php
-    $nombreDestino = strtolower($mov['destino_nombre'] ?? '');
-    if ($nombreDestino === 'persona externa' && !empty($mov['persona_destino'])) {
-        echo htmlspecialchars($mov['persona_destino']);
-    } else {
-        echo htmlspecialchars($mov['destino_nombre'] ?? '---');
-    }
-  ?>
-</td>
+    <hr>
+    <h5 class="mt-4">Historial de Movimientos de la Herramienta: <?= htmlspecialchars($herramientaActual['nombre_herramienta'] ?? '') ?></h5>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="table-dark text-center">
+          <tr>
+            <th>Herramienta</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Fecha de Envío</th>
+            <th>Aprobado por</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($movimientosHerramienta as $mov): ?>
+            <tr>
+              <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '---') ?></td>
+              <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---') ?></td>
+              <td>
+                <?php
+                $nombreDestino = strtolower($mov['destino_nombre'] ?? '');
+                if ($nombreDestino === 'persona externa' && !empty($mov['persona_destino'])) {
+                  echo htmlspecialchars($mov['persona_destino']);
+                } else {
+                  echo htmlspecialchars($mov['destino_nombre'] ?? '---');
+                }
+                ?>
+              </td>
 
-        <td><?= htmlspecialchars($mov['fecha_envio'] ?? '---') ?></td>
-        <td><?= htmlspecialchars($mov['aprobado_por'] ?? '---') ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+              <td><?= htmlspecialchars($mov['fecha_envio'] ?? '---') ?></td>
+              <td><?= htmlspecialchars($mov['aprobado_por'] ?? '---') ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
 <?php
-    else:
-        echo "<p class='text-muted mt-4'>Esta herramienta aún no tiene movimientos registrados.</p>";
-    endif;
+  else:
+    echo "<p class='text-muted mt-4'>Esta herramienta aún no tiene movimientos registrados.</p>";
+  endif;
 }
 ?>
 
 
-<?php 
+<?php
 include('templates/footer.php'); ?>
