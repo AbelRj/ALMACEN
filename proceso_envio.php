@@ -35,8 +35,6 @@
               data-url="crudM/eliminarM.php">
               <i class="bi bi-trash3"></i>
             </button>
-
-
           </td>
         </tr>
       <?php endforeach; ?>
@@ -49,8 +47,5 @@
 
 <!-- MODAL DE CONFIRMACIÓN DE EXITO -->
 <?php include("modal/modalExito.php"); ?>
-
-
-
 
 <?php include('templates/footer.php'); ?>

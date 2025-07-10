@@ -9,41 +9,13 @@ if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EL´ENMOLL</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-    }
-
-    .login-wrapper {
-      width: 100%;
-      height: 100%;
-    }
-
-    .login-card {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    @media (min-width: 576px) {
-      .login-card {
-        max-width: 400px;
-        height: auto;
-        margin: auto;
-      }
-    }
-  </style>
+ <link href="css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="css/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body class="bg-light">
@@ -95,6 +67,7 @@ if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
     });
   </script>
 
+  <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

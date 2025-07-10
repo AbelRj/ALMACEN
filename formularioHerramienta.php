@@ -51,19 +51,10 @@ include('templates/header.php'); ?>
   </div>
 </form>
 
-
 <!-- Modal de advertencia -->
 <?php include("modal/modalAdvertencia.php"); ?>
 
-
-
-
-
-
-
-
 <?php include('templates/footer.php'); ?>
-
 
 <script>
   document.querySelector("form").addEventListener("submit", function(e) {

@@ -17,7 +17,6 @@
   </div>
 </div>
 
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const botonesEliminar = document.querySelectorAll('.btnEliminar');

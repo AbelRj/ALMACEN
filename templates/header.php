@@ -24,63 +24,13 @@ include('crudF/leerF.php');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap5.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/datatables.css" />
+  <link rel="stylesheet" href="css/datatables.min.css">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="css/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/style.css">
   <title>EL´ENMOLL</title>
-
-  <style>
-    body {
-      overflow-y: scroll;
-    }
-
-    /*Estilos para altura responsive de graficos de index*/
-    .grafico-canvas {
-      height: 300px;
-    }
-
-    @media (min-width: 768px) {
-      .grafico-canvas {
-        height: 500px;
-      }
-    }
-
-    @media (max-width: 576px) {
-      div.dataTables_filter {
-        margin: 0 !important;
-        padding: 0 !important;
-        text-align: left !important;
-      }
-
-      div.dataTables_filter input {
-        margin-top: 8px !important;
-        width: 100% !important;
-      }
-
-      div.dataTables_length {
-        text-align: left !important;
-      }
-    }
-
-    /* Estilo para mantener encabezados oscuros también en columnas fijas */
-    .dataTables_wrapper .dataTable th {
-      background-color: #212529 !important;
-      /* Color de Bootstrap .table-dark */
-      color: #fff !important;
-      border-color: #32383e !important;
-    }
-
-    /* Opcional: bordes más suaves entre filas */
-    .dataTable td,
-    .dataTable th {
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-  </style>
-
 </head>
 
 <body>
@@ -147,7 +97,8 @@ include('crudF/leerF.php');
       </div>
     </nav>
   </header>
-  <div class="container shadow rounded bg-white p-4">
+
+  <div class="container shadow rounded bg-white p-2 mt-5">
     <?php
     $paginaActual = basename($_SERVER['PHP_SELF']);
     $titulo = 'Listado de herramientas';
@@ -177,12 +128,9 @@ include('crudF/leerF.php');
     } elseif ($paginaActual === 'listaHerramientas.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
       $titulo = 'Listado de herramientas - ' . ucfirst($_GET['fabrica']);
     }
-
     ?>
 
     <h2 class="mb-4 text-center"><?= $titulo ?></h2>
-
-
 
     <?php
     if (

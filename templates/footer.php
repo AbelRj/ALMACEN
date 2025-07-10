@@ -26,17 +26,15 @@
       });
     </script>
 
-
-
     <!-- jQuery (requerido por DataTables) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+   <!-- DataTables JS -->
+    <script src="js/datatables.js"></script>
+    <script src="js/datatables.min.js"></script>
     <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <!-- FixedColumns -->
-    <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+ 
+
 
     <script>
       $(document).ready(function() {
@@ -61,7 +59,6 @@
         $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
       });
     </script>
-
 
     <script>
       document.querySelector('[name="destino_id"]').addEventListener('change', function() {

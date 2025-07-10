@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/correoContra.css">
     <title>Recuperar Contraseña</title>
     <style>
         body {
@@ -56,13 +54,8 @@
 
 <body>
     <div>
-
         <img src="https://drive.google.com/uc?id=1iFhP357-1nOhKN1MCngt33ef7IjSHJ9D" alt="Logo de la empresa" style="max-width: 80%; display: block; margin: 0 auto;">
-
-        <p>
-            <a class="btnRecuperar" href="http://localhost/ALMACEN/reset.php?token={{token}}" class="button">Recuperar Contraseña</a>
-        </p>
+        <p><a class="btnRecuperar" href="http://localhost/ALMACEN/reset.php?token={{token}}" class="button">Recuperar Contraseña</a></p>
     </div>
 </body>
-
 </html>

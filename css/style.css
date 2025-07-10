@@ -1,0 +1,49 @@
+    body {
+      overflow-y: scroll;
+    }
+
+    /*Estilos para altura responsive de graficos de index*/
+    .grafico-canvas {
+      height: 300px;
+    }
+
+    @media (min-width: 768px) {
+      .grafico-canvas {
+        height: 500px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      div.dataTables_filter {
+        margin: 0 !important;
+        padding: 0 !important;
+        text-align: left !important;
+      }
+
+      div.dataTables_filter input {
+        margin-top: 8px !important;
+        width: 100% !important;
+      }
+
+      div.dataTables_length {
+        text-align: left !important;
+      }
+    }
+
+    /* Estilo para mantener encabezados oscuros también en columnas fijas */
+    .dataTables_wrapper .dataTable th {
+      background-color: #212529 !important;
+      /* Color de Bootstrap .table-dark */
+      color: #fff !important;
+      border-color: #32383e !important;
+    }
+
+    /* Opcional: bordes más suaves entre filas */
+    .dataTable td,
+    .dataTable th {
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+
+    

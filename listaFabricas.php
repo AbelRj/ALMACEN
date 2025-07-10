@@ -46,14 +46,6 @@ include('bd.php');
 <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
 <?php include("modal/modalExito.php"); ?>
 
-
 <?php include("modal/modalErrorEliminarFabrica.php"); ?>
-
-
-
-
-
-
-
 
 <?php include('templates/footer.php'); ?>

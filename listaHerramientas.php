@@ -70,10 +70,4 @@
 <!-- MODAL DE CONFIRMACIÓN DE EXITO -->
 <?php include("modal/modalExito.php"); ?>
 
-
-
-
-
-
-
 <?php include('templates/footer.php'); ?>
