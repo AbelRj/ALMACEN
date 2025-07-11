@@ -1,30 +1,34 @@
     </div>
-    <script>
-      const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
-      document.addEventListener('DOMContentLoaded', function() {
-        const selectDestino = document.querySelector('[name="destino_id"]');
-        const campoEnviadoA = document.getElementById('campoEnviadoA');
-        const inputProceso = document.querySelector('[name="proceso"]');
+<script>
+  const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
 
-        selectDestino.addEventListener('change', function() {
-          const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
+  document.addEventListener('DOMContentLoaded', function() {
+    const selectDestino = document.querySelector('[name="destino_id"]');
+    const campoEnviadoA = document.getElementById('campoEnviadoA');
+    const inputProceso = document.querySelector('[name="proceso"]');
 
-          if (textoSeleccionado === 'persona externa') {
-            campoEnviadoA.style.display = 'block';
+    // Validar si existen los elementos antes de trabajar con ellos
+    if (selectDestino && campoEnviadoA && inputProceso) {
+      selectDestino.addEventListener('change', function() {
+        const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
 
-            if (ROL_USUARIO === 'administrador') {
-              inputProceso.value = 'enviado';
-            } else {
-              inputProceso.value = 'pendiente';
-            }
+        if (textoSeleccionado === 'persona externa') {
+          campoEnviadoA.style.display = 'block';
 
+          if (ROL_USUARIO === 'administrador') {
+            inputProceso.value = 'enviado';
           } else {
-            campoEnviadoA.style.display = 'none';
             inputProceso.value = 'pendiente';
           }
-        });
+        } else {
+          campoEnviadoA.style.display = 'none';
+          inputProceso.value = 'pendiente';
+        }
       });
-    </script>
+    }
+  });
+</script>
+
 
     <!-- jQuery (requerido por DataTables) -->
     <script src="js/jquery.min.js"></script>
@@ -44,7 +48,7 @@
             leftColumns: 1
           },
           language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+            url: 'js/lenguaje.js'
           },
           pageLength: 5,
           lengthMenu: [5, 10, 25, 50, 100],
@@ -57,13 +61,6 @@
         $('#tablaUsuarios').DataTable(opcionesComun('#tablaUsuarios', 'contenedorUsuarios'));
         $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
         $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
-      });
-    </script>
-
-    <script>
-      document.querySelector('[name="destino_id"]').addEventListener('change', function() {
-        const valor = this.options[this.selectedIndex].text.toLowerCase();
-        document.getElementById('campoEnviadoA').style.display = valor === 'persona externa' ? 'block' : 'none';
       });
     </script>
     </body>

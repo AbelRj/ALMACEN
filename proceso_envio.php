@@ -20,7 +20,17 @@
           <td><?= htmlspecialchars($mov['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['estado'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['origen_nombre'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($mov['destino_nombre'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td>
+            <?php
+              $nombreDestino = strtolower($mov['destino_nombre'] ?? '');
+              if ($nombreDestino === 'persona externa' && !empty($mov['persona_destino'])) {
+                  echo htmlspecialchars($mov['persona_destino'], ENT_QUOTES, 'UTF-8');
+              } else {
+                  echo htmlspecialchars($mov['destino_nombre'] ?? '---', ENT_QUOTES, 'UTF-8');
+              }
+            ?>
+          </td>
+
           <td><?= htmlspecialchars($mov['fecha_envio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['proceso'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td>

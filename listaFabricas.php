@@ -39,13 +39,13 @@ include('bd.php');
   </table>
 </div>
 
-
 <!-- Modal de Confirmación para Fabricas -->
 <?php include("modal/modalEliminacion.php"); ?>
 
-<!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
+<!-- MODAL DE CONFIRMACIÓN DE EXITO -->
 <?php include("modal/modalExito.php"); ?>
 
+<!-- MODAL DE CONFIRMACIÓN DE ELIMINACION -->
 <?php include("modal/modalErrorEliminarFabrica.php"); ?>
 
 <?php include('templates/footer.php'); ?>

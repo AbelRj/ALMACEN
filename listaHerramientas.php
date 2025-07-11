@@ -54,8 +54,6 @@
                 <i class="bi bi-trash3"></i>
               </button>
 
-
-
             <?php endif; ?>
           </td>
         </tr>

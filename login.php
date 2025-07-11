@@ -53,20 +53,8 @@ if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
       <a href="restablecer.php" class="mt-2 d-block text-decoration-none">¿Se olvidó su contraseña?</a>
     </div>
   </div>
-
-  <script>
-    const togglePassword = document.getElementById("togglePassword");
-    const password = document.getElementById("password");
-    const icon = document.getElementById("icono-ojo");
-
-    togglePassword.addEventListener("click", function() {
-      const tipo = password.getAttribute("type") === "password" ? "text" : "password";
-      password.setAttribute("type", tipo);
-      icon.classList.toggle("bi-eye");
-      icon.classList.toggle("bi-eye-slash");
-    });
-  </script>
-
+  
+  <script src="js/login.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 

@@ -4,31 +4,37 @@ include("../bd.php");
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Obtener nombre de la fábrica asociada a la herramienta
-    $consulta = $conexion->prepare("
-        SELECT f.nombre_fabrica 
-        FROM herramientas h 
-        JOIN fabricas f ON h.id_fabrica = f.id 
-        WHERE h.id = :id
-    ");
-    $consulta->bindParam(':id', $id);
-    $consulta->execute();
-    $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+    // 1. Obtener los datos de la herramienta antes de eliminarla
+    $stmt = $conexion->prepare("SELECT * FROM herramientas WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $herramienta = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Eliminar la herramienta
-    $sentencia = $conexion->prepare("DELETE FROM herramientas WHERE id = :id");
-    $sentencia->bindParam(':id', $id);
-    $sentencia->execute();
+    if ($herramienta) {
+        // 2. Insertar en la tabla eliminados_herramientas
+        $stmtInsert = $conexion->prepare("
+            INSERT INTO eliminados_herramientas (nombre_herramienta, descripcion, codigo, fabrica, estado, fecha_eliminacion)
+            VALUES (:nombre, :descripcion, :codigo, :fabrica, :estado, NOW())
+        ");
+        $stmtInsert->execute([
+            ':nombre' => $herramienta['nombre_herramienta'],
+            ':descripcion' => $herramienta['descripcion'],
+            ':codigo' => $herramienta['codigo'],
+            ':fabrica' => $herramienta['id_fabrica'],
+            ':estado' => $herramienta['estado']
+        ]);
 
-    // Redirigir a index.php con el nombre de la fábrica
-    $nombreFabrica = $resultado['nombre_fabrica'] ?? '';
-    $url = "../listaHerramientas.php";
-    if (!empty($nombreFabrica)) {
-        $url .= "?fabrica=" . urlencode($nombreFabrica);
+        // 3. Eliminar la herramienta
+        $stmtDelete = $conexion->prepare("DELETE FROM herramientas WHERE id = :id");
+        $stmtDelete->bindParam(':id', $id);
+        $stmtDelete->execute();
+
+        header("Location: ../listaHerramientas.php");
+        exit();
+    } else {
+        echo "Herramienta no encontrada.";
     }
-
-    header("Location: $url");
-    exit();
 } else {
     echo "ID no proporcionado.";
 }
+?>
