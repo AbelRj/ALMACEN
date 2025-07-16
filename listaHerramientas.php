@@ -50,6 +50,7 @@
               <button type="button" class="btn btn-danger btnEliminar"
                 data-id="<?= $herramienta['id']; ?>"
                 data-nombre="<?= htmlspecialchars($herramienta['nombre_herramienta'], ENT_QUOTES, 'UTF-8'); ?>"
+                data-tipo="herramienta"
                 data-url="crudH/eliminar.php">
                 <i class="bi bi-trash3"></i>
               </button>
@@ -67,5 +68,8 @@
 
 <!-- MODAL DE CONFIRMACIÓN DE EXITO -->
 <?php include("modal/modalExito.php"); ?>
+<?php include("modal/modalEliminacionExitosa.php"); ?>
+
+
 
 <?php include('templates/footer.php'); ?>

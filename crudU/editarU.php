@@ -1,7 +1,7 @@
 <?php
 include("../bd.php");
 
-$nombreyA = $_POST['nombreyapellidoU'];
+$nombreyA = strtolower($_POST['nombreyapellidoU']);
 $fechaU = $_POST['fechaU'];
 $nombreU = $_POST['nombreU'];
 $passwordPlano = $_POST['passwordU'];

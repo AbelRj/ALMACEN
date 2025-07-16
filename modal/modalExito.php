@@ -6,7 +6,6 @@
     'usuario' => 'El usuario',
     'fabrica' => 'La fábrica',
     'movimiento' => 'El proceso de envio',
-    'enviado' => 'El envio',
     default => 'El registro'
   };
   ?>
@@ -17,8 +16,15 @@
           <h5 class="modal-title">¡Proceso exitoso!</h5>
         </div>
         <div class="modal-body">
-          <?= isset($_GET['guardado']) ? "$entidad ha sido guardado correctamente." : "$entidad ha sido actualizado correctamente." ?>
-        </div>
+<?= ($tipo === 'movimiento' || $tipo === 'enviado')
+      ? (isset($_GET['guardado'])
+          ? 'Movimiento enviado para aprobación.'
+          : 'El movimiento ha sido aprobado correctamente.')
+      : (isset($_GET['guardado'])
+          ? "$entidad ha sido creado correctamente."
+          : "$entidad ha sido actualizado correctamente.") ?>
+     
+          </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="cerrarModal">Cerrar</button>
         </div>

@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
     $sentencia->execute();
 
     // Redirigir de vuelta al listado
-    header("Location: ../listaUsuarios.php");
+    header("Location: ../listaUsuarios.php?eliminado=usuario");
     exit();
 } else {
     echo "ID no proporcionado.";

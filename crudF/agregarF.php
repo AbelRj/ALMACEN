@@ -3,7 +3,7 @@ include("../bd.php");
 
 if (isset($_POST['agregar'])) {
     $nombreF = strtoupper($_POST['nombreF']);
-    $lugarF = $_POST['lugarF'];
+    $lugarF =strtolower($_POST['lugarF']);
 
 
     if (!empty($nombreF) && !empty($lugarF)) {

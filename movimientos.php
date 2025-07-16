@@ -6,13 +6,13 @@ include('templates/header.php'); ?>
   <div class="col-sm-2">
     <label for="nombreHerramienta" class="form-label">Nombre:</label>
     <input type="text" class="form-control" id="nombreHerramienta" placeholder="Nombre de la herramienta"
-      value="<?= $herramientaActual['nombre_herramienta'] ?? '' ?>">
+      value="<?= $herramientaActual['nombre_herramienta'] ?? '' ?>" readonly>
   </div>
 
   <div class="col-sm-2">
     <label for="codigoHerramienta" class="form-label">Código:</label>
     <input type="text" class="form-control" id="codigoHerramienta" placeholder="Código"
-      value="<?= $herramientaActual['codigo'] ?? '' ?>">
+      value="<?= $herramientaActual['codigo'] ?? '' ?>" readonly>
   </div>
 
   <div class="col-sm-2">
@@ -32,8 +32,8 @@ include('templates/header.php'); ?>
 
   <div class="col-sm-2">
     <label for="origenHerramienta" class="form-label">Destino:</label>
-    <select class="form-select" name="destino_id" required>
-      <option>Seleccionar</option>
+    <select class="form-select" name="destino_id" >
+      <option value="">Seleccionar</option>
       <?php foreach ($fabricas as $fabrica): ?>
         <option value="<?= $fabrica['id'] ?>">
           <?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8') ?>
@@ -63,5 +63,6 @@ include('templates/header.php'); ?>
 
 
 <?php include('historialMH.php'); ?>
+<?php include('modal/modalErrorDestino.php'); ?>
 
 <?php include('templates/footer.php'); ?>

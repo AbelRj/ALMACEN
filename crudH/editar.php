@@ -1,9 +1,9 @@
 <?php
 include("../bd.php");
 
-$nombre = $_POST['nombreH'];
-$descripcion = $_POST['descripcionH'];
-$codigo = $_POST['codigoH'];
+$nombre = strtoupper($_POST['nombreH']);
+$descripcion = strtolower($_POST['descripcionH']);
+$codigo = strtoupper($_POST['codigoH']);
 $estado = $_POST['estadoH'];
 $fabrica = $_POST['fabricaH'];
 

@@ -3,9 +3,9 @@ include("../bd.php");
 /* AGREGAR HERRAMIENTA */
 
 if (isset($_POST['agregar'])) {
-    $nombre = $_POST['nombreH'];
-    $descripcion = $_POST['descripcionH'];
-    $codigo = $_POST['codigoH'];
+    $nombre = strtoupper($_POST['nombreH']);
+    $descripcion = strtolower($_POST['descripcionH']);
+    $codigo = strtoupper($_POST['codigoH']);
     $estado = $_POST['estadoH'];
     $fabrica_nombre = $_POST['fabricaH'];
 

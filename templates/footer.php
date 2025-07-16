@@ -37,7 +37,17 @@
     <script src="js/datatables.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
- 
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("toggleNavbar");
+    const navbarMenu = document.getElementById("navbarNav");
+
+    toggleBtn.addEventListener("click", function () {
+      navbarMenu.classList.toggle("show");
+    });
+  });
+</script>
+
 
 
     <script>

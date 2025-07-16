@@ -1,4 +1,5 @@
 <?php
+
 /* TRAER DATOS MEDIANTE EL ID DE LA FÁBRICA */
 $esEdicion = false;
 $fabricaActual = null;

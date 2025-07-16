@@ -2,6 +2,19 @@
       overflow-y: scroll;
     }
 
+
+    /* Navbar colapsable */
+.navbar-collapse {
+  display: none;
+}
+
+.navbar-collapse.show {
+  display: block;
+}
+
+
+
+
     /*Estilos para altura responsive de graficos de index*/
     .grafico-canvas {
       height: 300px;
@@ -47,3 +60,28 @@
 
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

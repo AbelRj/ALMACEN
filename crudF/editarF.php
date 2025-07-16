@@ -4,8 +4,8 @@ include("../bd.php");
 if (isset($_POST['editar']) && isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $nombreF = $_POST['nombreF'];
-    $lugarF = $_POST['lugarF'];
+    $nombreF = strtoupper($_POST['nombreF']);
+    $lugarF =strtolower($_POST['lugarF']);
 
     // Preparar y ejecutar la actualización
     $stmt = $conexion->prepare("UPDATE fabricas SET nombre_fabrica = :nombre, lugar = :lugar WHERE id = :id");

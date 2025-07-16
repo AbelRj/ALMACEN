@@ -19,12 +19,13 @@ include('templates/header.php'); ?>
   </div>
   <div class="col-md-12">
     <label for="inputCity" class="form-label">Contraseña</label>
-    <input type="password" class="form-control" name="passwordU" placeholder="Dejar en blanco para mantener contraseña actual">
+<input type="password" class="form-control" name="passwordU"
+  placeholder="<?= $esEdicion ? 'Dejar en blanco para mantener contraseña actual' : 'Escriba una contraseña' ?>">
 
   </div>
   <div class="col-md-12">
     <label for="inputCity" class="form-label">Correo Electronico</label>
-    <input type="text" class="form-control" name="emailU" placeholder="Correo electrónico"
+    <input type="email" class="form-control" name="emailU" placeholder="Correo electrónico"
       value="<?= $usuarioActual['email'] ?? '' ?>">
   </div>
   <div class="col-md-4">

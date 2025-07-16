@@ -44,6 +44,7 @@ include('bd.php');
 
 <!-- MODAL DE CONFIRMACIÓN DE EXITO -->
 <?php include("modal/modalExito.php"); ?>
+<?php include("modal/modalEliminacionExitosa.php"); ?>
 
 <!-- MODAL DE CONFIRMACIÓN DE ELIMINACION -->
 <?php include("modal/modalErrorEliminarFabrica.php"); ?>

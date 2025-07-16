@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
         $sentencia->bindParam(':id', $id);
         $sentencia->execute();
 
-        header("Location: ../listaFabricas.php?eliminado=ok");
+        header("Location: ../listaFabricas.php?eliminado=fabrica");
         exit();
     } catch (PDOException $e) {
         // Si el error es por restricción de clave foránea

@@ -15,7 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
   $stmtOrigen->bindParam(':id', $herramientaId, PDO::PARAM_INT);
   $stmtOrigen->execute();
   $origenId = $stmtOrigen->fetchColumn();
-
+  if (empty($nuevoDestinoId)) {
+    header("Location: ../movimientos.php?id=$herramientaId&error=sin_destino");
+    exit();
+}
   $esMismoDestino = ($origenId == $nuevoDestinoId);
   $esOtros = false;
 
@@ -26,7 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
 
   if ($nombreDestino === 'persona externa') {
     $esOtros = true;
+        // Validar que se haya ingresado el nombre del destinatario externo
+    if (empty(trim($enviadoA))) {
+      header("Location: ../movimientos.php?id=$herramientaId&error=persona_externa_vacia");
+      exit();
+    }
   }
+
 
   // Validación: destino diferente o persona externa con nombre
   if (!$esMismoDestino || ($esMismoDestino && $esOtros && !empty($enviadoA))) {
@@ -85,11 +94,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mover'])) {
       $stmtEliminar = $conexion->prepare("DELETE FROM movimientos WHERE id IN ($placeholders)");
       $stmtEliminar->execute($idsAEliminar);
     }
-    header("Location: ../listaHerramientas.php?guardado=ok&tipo=movimiento");
+  // Si fue a persona externa y ya fue aprobado
+if ($esOtros && isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador') {
+  header("Location: ../listaHerramientas.php?editado=ok&tipo=enviado");
+} else {
+  header("Location: ../listaHerramientas.php?guardado=ok&tipo=movimiento");
+}
 
 
     exit();
   } else {
-    echo "<script>alert('La fábrica de destino debe ser diferente a la de origen');</script>";
+    header("Location: ../movimientos.php?id=$herramientaId&error=destino_igual");
+exit();
   }
+
 }

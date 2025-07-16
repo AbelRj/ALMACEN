@@ -1,40 +1,45 @@
 <?php
+session_start();
 include("../bd.php");
+$usuarioEliminador = $_SESSION['usuario'] ?? 'desconocido';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['motivo'])) {
+    $id = $_POST['id'];
+    $motivo = trim($_POST['motivo']);
 
-    // 1. Obtener los datos de la herramienta antes de eliminarla
+    // Obtener los datos antes de eliminar
     $stmt = $conexion->prepare("SELECT * FROM herramientas WHERE id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $herramienta = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($herramienta) {
-        // 2. Insertar en la tabla eliminados_herramientas
+        // Insertar en la tabla de eliminados
         $stmtInsert = $conexion->prepare("
-            INSERT INTO eliminados_herramientas (nombre_herramienta, descripcion, codigo, fabrica, estado, fecha_eliminacion)
-            VALUES (:nombre, :descripcion, :codigo, :fabrica, :estado, NOW())
+            INSERT INTO eliminados_herramientas 
+            (nombre_herramienta, descripcion, codigo, fabrica, estado, motivo, fecha_eliminacion, eliminado_por)
+            VALUES (:nombre, :descripcion, :codigo, :fabrica, :estado, :motivo, NOW(), :eliminado_por)
         ");
         $stmtInsert->execute([
             ':nombre' => $herramienta['nombre_herramienta'],
             ':descripcion' => $herramienta['descripcion'],
             ':codigo' => $herramienta['codigo'],
             ':fabrica' => $herramienta['id_fabrica'],
-            ':estado' => $herramienta['estado']
+            ':estado' => $herramienta['estado'],
+            ':motivo' => $motivo,
+            ':eliminado_por' => $usuarioEliminador
         ]);
 
-        // 3. Eliminar la herramienta
+        // Eliminar de herramientas
         $stmtDelete = $conexion->prepare("DELETE FROM herramientas WHERE id = :id");
         $stmtDelete->bindParam(':id', $id);
         $stmtDelete->execute();
 
-        header("Location: ../listaHerramientas.php");
+        header("Location: ../listaHerramientas.php?eliminado=herramienta");
         exit();
     } else {
         echo "Herramienta no encontrada.";
     }
 } else {
-    echo "ID no proporcionado.";
+    echo "Datos incompletos.";
 }
-?>
