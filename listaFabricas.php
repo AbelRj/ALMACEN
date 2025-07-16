@@ -12,20 +12,20 @@ include('bd.php');
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($fabricas as $usuario): ?>
-        <?php if (strtolower(trim($usuario['nombre_fabrica'])) === 'persona externa') continue; ?>
+      <?php foreach ($fabricas as $fabrica): ?>
+        <?php if (strtolower(trim($fabrica['nombre_fabrica'])) === 'persona externa') continue; ?>
         <tr>
-          <td><?= htmlspecialchars($usuario['nombre_fabrica'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($usuario['lugar'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($fabrica['nombre_fabrica'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($fabrica['lugar'] ?: '---', ENT_QUOTES, 'UTF-8'); ?></td>
 
           <td>
-            <a href="formularioFabrica.php?id=<?= $usuario['id']; ?>" class="btn btn-dark">
+            <a href="formularioFabrica.php?id=<?= $fabrica['id']; ?>" class="btn btn-dark">
               <i class="bi bi-pencil"></i>
             </a>
             <!-- Botón Eliminar con Modal -->
             <button type="button" class="btn btn-danger btnEliminar"
-              data-id="<?= $usuario['id']; ?>"
-              data-nombre="<?= htmlspecialchars($usuario['nombre_fabrica'], ENT_QUOTES, 'UTF-8'); ?>"
+              data-id="<?= $fabrica['id']; ?>"
+              data-nombre="<?= htmlspecialchars($fabrica['nombre_fabrica'], ENT_QUOTES, 'UTF-8'); ?>"
               data-url="crudF/eliminarF.php">
               <i class="bi bi-trash3"></i>
             </button>

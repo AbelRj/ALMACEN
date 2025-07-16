@@ -1,4 +1,15 @@
-<?php include('templates/header.php'); ?>
+<?php include('templates/header.php'); 
+
+$hRetiradas = $conexion->prepare("
+  SELECT eh.*, f.nombre_fabrica
+  FROM eliminados_herramientas eh
+  JOIN fabricas f ON eh.fabrica = f.id
+");
+$hRetiradas->execute();
+$retiradas = $hRetiradas->fetchAll(PDO::FETCH_ASSOC);
+
+
+?>
 
 <div class="table-responsive" id="contenedorHerramientas" style="visibility: hidden;">
   <table id="tablaHerramientas" class="table table-striped table-bordered nowrap" style="width:100%">
@@ -15,50 +26,16 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($herramientas as $herramienta): ?>
+      <?php foreach ($retiradas as $eliminado): ?>
         <tr>
-          <td><?= htmlspecialchars($herramienta['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($herramienta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($herramienta['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($herramienta['estado'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($herramienta['nombre_fabrica'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td>
-
-            <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-              <a href="formularioHerramienta.php?id=<?= $herramienta['id']; ?>" type="button" class="btn btn-dark">
-                <i class="bi bi-pencil"></i>
-              </a>
-            <?php endif; ?>
-
-            <?php if ((isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador") || (isset($_SESSION["rol"], $_SESSION["fabrica_id"]) &&
-              $_SESSION["rol"] === "supervisor" && $_SESSION["fabrica_id"] == $herramienta["id_fabrica"])): ?>
-
-              <?php if (in_array($herramienta['id'], $pendientes)): ?>
-                <!-- Icono de X si hay movimiento pendiente -->
-                <button type="button" class="btn btn-secondary" disabled>
-                  <i class="bi bi-x-lg"></i>
-                </button>
-              <?php else: ?>
-                <!-- Botón de movimiento si no hay pendiente -->
-                <a href="movimientos.php?id=<?= $herramienta['id']; ?>" type="button" class="btn btn-light">
-                  <i class="bi bi-rocket-takeoff"></i>
-                </a>
-              <?php endif; ?>
-            <?php endif; ?>
-
-            <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
-
-              <!-- BOTÓN ELIMINAR -->
-              <button type="button" class="btn btn-danger btnEliminar"
-                data-id="<?= $herramienta['id']; ?>"
-                data-nombre="<?= htmlspecialchars($herramienta['nombre_herramienta'], ENT_QUOTES, 'UTF-8'); ?>"
-                data-tipo="herramienta"
-                data-url="crudH/eliminar.php">
-                <i class="bi bi-trash3"></i>
-              </button>
-
-            <?php endif; ?>
-          </td>
+          <td><?= htmlspecialchars($eliminado['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['estado'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['nombre_fabrica'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['motivo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['fecha_eliminacion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+          <td><?= htmlspecialchars($eliminado['eliminado_por'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

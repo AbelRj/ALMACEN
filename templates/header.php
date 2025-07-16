@@ -55,6 +55,7 @@ include('crudF/leerF.php');
                 Empresas
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownFabricas">
+
                 <?php foreach ($fabricas as $fabricaItem): ?>
                   <li>
                     <a class="dropdown-item" href="listaHerramientas.php?fabrica=<?= urlencode(strtolower($fabricaItem['nombre_fabrica'])) ?>">

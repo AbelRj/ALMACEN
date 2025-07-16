@@ -45,6 +45,26 @@ foreach ($datosEstado as $index => $fila) {
   $datosEstadoValores[] = $fila['cantidad'];
   $coloresEstado[] = $coloresDisponibles[$index % count($coloresDisponibles)];
 }
+
+
+
+$consulta = $conexion->prepare("
+  SELECT f.nombre_fabrica, COUNT(eh.id) AS cantidad
+  FROM eliminados_herramientas eh
+  JOIN fabricas f ON eh.fabrica = f.id
+  GROUP BY f.nombre_fabrica
+");
+$consulta->execute();
+$data = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+// Separar datos en arrays para el gráfico
+$labels = [];
+$valores = [];
+foreach ($data as $fila) {
+  $labels[] = $fila['nombre_fabrica'];
+  $valores[] = $fila['cantidad'];
+}
+
 ?>
 
 <!-- Chart.js -->
@@ -65,6 +85,13 @@ foreach ($datosEstado as $index => $fila) {
     <div class="col-12 col-md-6 mb-4">
       <div class="card p-3 shadow">
         <canvas id="graficoEstadoCircular" class="grafico-canvas"></canvas>
+      </div>
+    </div>
+
+        <!-- Gráfico: Herramientas Eliminadas-->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <canvas id="graficoHerramientasEliminadas" class="grafico-canvas"></canvas>
       </div>
     </div>
 
@@ -142,6 +169,55 @@ foreach ($datosEstado as $index => $fila) {
       }
     }
   });
+
+  const ctx = document.getElementById('graficoHerramientasEliminadas').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: <?= json_encode($labels) ?>,
+    datasets: [{
+      label: 'Herramientas eliminadas',
+      data: <?= json_encode($valores) ?>,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)'
+      ],
+      borderColor: 'rgba(0, 0, 0, 0.2)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Cantidad'
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Fábricas'
+        }
+      }
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Herramientas perdidas o dañadas por fábrica'
+      }
+    }
+  }
+});
+
 </script>
+
 
 <?php include('templates/footer.php'); ?>

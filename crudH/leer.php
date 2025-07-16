@@ -22,13 +22,7 @@ $sentencia->execute();
 $herramientas = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
-/*VER TODAS LASFABRICAS*/
-$sentencia2 = $conexion->prepare("
-          SELECT *
-          FROM fabricas
-      ");
-$sentencia2->execute();
-$fabricas = $sentencia2->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 
