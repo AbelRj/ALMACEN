@@ -52,10 +52,5 @@
   </table>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
-<?php include("modal/modalEliminacion.php"); ?>
-
-<!-- MODAL DE CONFIRMACIÓN DE EXITO -->
-<?php include("modal/modalExito.php"); ?>
 
 <?php include('templates/footer.php'); ?>

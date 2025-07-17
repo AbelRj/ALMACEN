@@ -13,6 +13,7 @@ if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EL´ENMOLL</title>
+  <link rel="icon" href="img/icono.ico" type="image/x-icon">
  <link href="css/bootstrap.min.css" rel="stylesheet">
  <link rel="stylesheet" href="css/bootstrap-icons.css">
   <link rel="stylesheet" href="css/login.css">
@@ -57,5 +58,4 @@ if (isset($_SESSION['usuario']) && $_SESSION['usuario'] !== null) {
   <script src="js/login.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

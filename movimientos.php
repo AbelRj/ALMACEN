@@ -61,7 +61,6 @@ include('templates/header.php'); ?>
   </div>
 </form>
 
-
 <?php include('historialMH.php'); ?>
 <?php include('modal/modalErrorDestino.php'); ?>
 

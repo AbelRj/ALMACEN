@@ -5,7 +5,7 @@
         <h5 class="modal-title">Atención</h5>
       </div>
       <div class="modal-body">
-        Faltan datos por completar de la herramienta. Por favor, revisa todos los campos.
+        Faltan datos por completar. Por favor, revisa todos los campos.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

@@ -1,7 +1,7 @@
 <?php
 include('templates/header.php'); ?>
 
-<form class="row g-3" method="POST" action="<?= $esEdicion ? 'crudU/editarU.php?id=' . $idEditar : 'crudU/agregarU.php' ?>">
+<form class="row g-3" id="formUsuario" method="POST" action="<?= $esEdicion ? 'crudU/editarU.php?id=' . $idEditar : 'crudU/agregarU.php' ?>">
   <div class="col-12">
     <label for="inputAddress" class="form-label">Nombre y Apellido</label>
     <input type="text" class="form-control" name="nombreyapellidoU" placeholder="Nombre y apellido"
@@ -59,37 +59,7 @@ include('templates/header.php'); ?>
   </div>
 </form>
 
-<!-- Modal de advertencia -->
-<?php include("modal/modalAdvertencia.php"); ?>
+
 
 <?php include('templates/footer.php'); ?>
 
-<script>
-  document.querySelector("form").addEventListener("submit", function(e) {
-    const nombreyA = document.querySelector('input[name="nombreyapellidoU"]').value.trim();
-    const fechaU = document.querySelector('input[name="fechaU"]').value.trim();
-    const nombreU = document.querySelector('input[name="nombreU"]').value.trim();
-    const passwordU = document.querySelector('input[name="passwordU"]').value.trim();
-    const emailU = document.querySelector('input[name="emailU"]').value.trim();
-    const fabricaU = document.querySelector('select[name="fabricaU"]').value;
-    const rolU = document.querySelector('select[name="rolU"]').value;
-
-    const esEdicion = <?= $esEdicion ? 'true' : 'false' ?>;
-
-    const faltaPassword = !passwordU && !esEdicion;
-
-    if (
-      !nombreyA ||
-      !fechaU ||
-      !nombreU ||
-      faltaPassword ||
-      !emailU ||
-      fabricaU === "Seleccionar" ||
-      rolU === "Seleccionar"
-    ) {
-      e.preventDefault();
-      const modal = new bootstrap.Modal(document.getElementById('modalError'));
-      modal.show();
-    }
-  });
-</script>

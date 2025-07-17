@@ -1,7 +1,7 @@
 <?php
 include('templates/header.php'); ?>
 
-<form class="row g-3" method="POST" action="<?= $esEdicion ? 'crudH/editar.php?id=' . $idEditar : 'crudH/agregar.php' ?>">
+<form class="row g-3" id="formHerramienta" method="POST" action="<?= $esEdicion ? 'crudH/editar.php?id=' . $idEditar : 'crudH/agregar.php' ?>">
   <div class="col-12">
     <label for="inputAddress" class="form-label">Nombre</label>
     <input type="text" class="form-control" name="nombreH" placeholder="Nombre de la herramienta"
@@ -51,29 +51,9 @@ include('templates/header.php'); ?>
   </div>
 </form>
 
-<!-- Modal de advertencia -->
-<?php include("modal/modalAdvertencia.php"); ?>
 
 <?php include('templates/footer.php'); ?>
 
 <script>
-  document.querySelector("form").addEventListener("submit", function(e) {
-    const nombre = document.querySelector('input[name="nombreH"]').value.trim();
-    const descripcion = document.querySelector('input[name="descripcionH"]').value.trim();
-    const codigo = document.querySelector('input[name="codigoH"]').value.trim();
-    const estado = document.querySelector('select[name="estadoH"]').value;
-    const fabrica = document.querySelector('select[name="fabricaH"]').value;
 
-    if (
-      !nombre ||
-      !descripcion ||
-      !codigo ||
-      estado === "Seleccionar" ||
-      fabrica === "Seleccionar"
-    ) {
-      e.preventDefault();
-      const modal = new bootstrap.Modal(document.getElementById('modalError'));
-      modal.show();
-    }
-  });
 </script>

@@ -9,7 +9,6 @@ if (isset($_SESSION["usuario"])) {
   header("location:login.php");
 }
 
-
 include("bd.php");
 include("crudH/leer.php");
 include('crudM/leerM.php');
@@ -24,11 +23,12 @@ include('crudF/leerF.php');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/icono.ico" type="image/x-icon">
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="css/datatables.css" />
   <link rel="stylesheet" href="css/datatables.min.css">
-<link href="css/bootstrap.min.css" rel="stylesheet">
- <link rel="stylesheet" href="css/bootstrap-icons.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap-icons.css">
   <link rel="stylesheet" href="css/style.css">
   <title>EL´ENMOLL</title>
 </head>
@@ -38,9 +38,9 @@ include('crudF/leerF.php');
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.php"><img src="img/logo.png" width="60px" alt=""></a>
-<button class="navbar-toggler" type="button" id="toggleNavbar">
-  <span class="navbar-toggler-icon"></span>
-</button>
+        <button class="navbar-toggler" type="button" id="toggleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
@@ -79,7 +79,7 @@ include('crudF/leerF.php');
                 <a class="nav-link " aria-current="page" href="listaUsuarios.php">Usuarios</a>
               </li>
             <?php endif; ?>
-                        <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
+            <?php if (isset($_SESSION["rol"]) && $_SESSION["rol"] === "administrador"): ?>
               <li class="nav-item">
                 <a class="nav-link " aria-current="page" href="listaRetiradas.php">Retiradas</a>
               </li>
@@ -133,6 +133,8 @@ include('crudF/leerF.php');
       $titulo = 'Listado de usuarios';
     } elseif ($paginaActual === 'listaHerramientas.php' && isset($_GET['fabrica']) && $_GET['fabrica'] !== '') {
       $titulo = 'Listado de herramientas - ' . ucfirst($_GET['fabrica']);
+    }elseif ($paginaActual === 'listaRetiradas.php') {
+      $titulo = 'Herramientas Eliminadas';
     }
     ?>
 

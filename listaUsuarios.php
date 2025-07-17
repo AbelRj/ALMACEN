@@ -50,11 +50,4 @@ include('bd.php');
 </div>
 
 
-<!-- Modal de Confirmación para Usuario -->
-<?php include("modal/modalEliminacion.php"); ?>
-
-<!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
-<?php include("modal/modalExito.php"); ?>
-<?php include("modal/modalEliminacionExitosa.php"); ?>
-
 <?php include('templates/footer.php'); ?>
