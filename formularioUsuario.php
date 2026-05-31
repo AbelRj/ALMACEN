@@ -17,12 +17,23 @@ include('templates/header.php'); ?>
     <input type="text" class="form-control" name="nombreU" placeholder="Nombre de usuario"
       value="<?= $usuarioActual['nombre_usuario'] ?? '' ?>">
   </div>
-  <div class="col-md-12">
-    <label for="inputCity" class="form-label">Contraseña</label>
-<input type="password" class="form-control" name="passwordU"
-  placeholder="<?= $esEdicion ? 'Dejar en blanco para mantener contraseña actual' : 'Escriba una contraseña' ?>">
+<div class="col-md-12">
+    <label for="passwordU" class="form-label">Contraseña</label>
 
-  </div>
+    <div class="input-group">
+        <input type="password"
+            class="form-control"
+            id="passwordU"
+            name="passwordU"
+            placeholder="<?= $esEdicion ? 'Dejar en blanco para mantener contraseña actual' : 'Escriba una contraseña' ?>">
+
+        <button class="btn btn-outline-secondary"
+            type="button"
+            id="togglePassword">
+            <i class="bi bi-eye"></i>
+        </button>
+    </div>
+</div>
   <div class="col-md-12">
     <label for="inputCity" class="form-label">Correo Electronico</label>
     <input type="email" class="form-control" name="emailU" placeholder="Correo electrónico"

@@ -6,6 +6,7 @@ $contraseña = "";
 try {
 
     $conexion = new PDO("mysql:host=$servidor;dbname=$baseDeDatos", $usuario, $contraseña);
+   
 
     //echo "conexion realizada";
 

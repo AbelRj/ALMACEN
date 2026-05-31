@@ -15,6 +15,24 @@
     <script src="js/bootstrap.bundle.min.js"></script>
 
     <script>
+document.getElementById('togglePassword').addEventListener('click', function () {
+
+    const password = document.getElementById('passwordU');
+    const icon = this.querySelector('i');
+
+    if (password.type === 'password') {
+        password.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+    } else {
+        password.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+});
+</script>
+
+    <script>
       
       //Para que aparesca el input si hacen click en persona externa, tambien para ver si el usuario es administrador
       //el texto proceso cambia a enviado pero si es supervisor se mantiene en pendiente

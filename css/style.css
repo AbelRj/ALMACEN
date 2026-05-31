@@ -58,7 +58,22 @@
       white-space: nowrap;
     }
 
+#tablaHerramientas {
+  table-layout: fixed;
+  width: 100%;
+}
 
+#tablaHerramientas th:nth-child(2),
+#tablaHerramientas td.col-descripcion {
+  width: 50px;
+  max-width: 50px;
+}
+
+#tablaHerramientas td.col-descripcion {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
     
 
 

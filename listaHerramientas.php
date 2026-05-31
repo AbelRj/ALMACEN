@@ -1,7 +1,7 @@
 <?php include('templates/header.php'); ?>
 
 <div class="table-responsive" id="contenedorHerramientas" style="visibility: hidden;">
-  <table id="tablaHerramientas" class="table table-striped table-bordered nowrap" style="width:100%">
+  <table id="tablaHerramientas" class="table table-striped table-bordered" style="width:100%">
     <thead class="table-dark text-center">
       <tr>
         <th>Nombre</th>
@@ -16,7 +16,9 @@
       <?php foreach ($herramientas as $herramienta): ?>
         <tr>
           <td><?= htmlspecialchars($herramienta['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-          <td><?= htmlspecialchars($herramienta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+<td  class="col-descripcion">
+  <?= htmlspecialchars($herramienta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</td>
           <td><?= htmlspecialchars($herramienta['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($herramienta['estado'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($herramienta['nombre_fabrica'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
