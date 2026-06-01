@@ -58,22 +58,17 @@
       white-space: nowrap;
     }
 
-#tablaHerramientas {
-  table-layout: fixed;
-  width: 100%;
-}
-
+    /* Descripción */
 #tablaHerramientas th:nth-child(2),
-#tablaHerramientas td.col-descripcion {
-  width: 50px;
-  max-width: 50px;
+#tablaHerramientas td:nth-child(2) {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
 }
 
-#tablaHerramientas td.col-descripcion {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
     
 
 

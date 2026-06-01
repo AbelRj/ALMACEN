@@ -1,106 +1,275 @@
   <!-- MODAL DE CONFIRMACIÓN DE EXITO -->
-<?php include("modal/modalExito.php"); ?>
+  <?php include("modal/modalExito.php"); ?>
   <!-- Modal de advertencia -->
-<?php include("modal/modalAdvertencia.php"); ?>
-<!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
- <?php include("modal/modalEliminacionExitosa.php"); ?>
-<?php include("modal/modalEliminacion.php"); ?>
+  <?php include("modal/modalAdvertencia.php"); ?>
+  <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
+  <?php include("modal/modalEliminacionExitosa.php"); ?>
+  <?php include("modal/modalEliminacion.php"); ?>
   </div>
-      <!-- jQuery (requerido por DataTables) -->
-    <script src="js/jquery.min.js"></script>
-    <!-- DataTables JS -->
-    <script src="js/datatables.js"></script>
-    <script src="js/datatables.min.js"></script>
-    <!-- Bootstrap 5 JS -->
-    <script src="js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery (requerido por DataTables) -->
+  <script src="js/jquery.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="js/datatables.js"></script>
+  <script src="js/datatables.min.js"></script>
+  <!-- Bootstrap 5 JS -->
+  <script src="js/bootstrap.bundle.min.js"></script>
 
-    <script>
-document.getElementById('togglePassword').addEventListener('click', function () {
+  <script>
+    //Para que aparesca el input si hacen click en persona externa, tambien para ver si el usuario es administrador
+    //el texto proceso cambia a enviado pero si es supervisor se mantiene en pendiente
+    const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
+    document.addEventListener('DOMContentLoaded', function() {
+      const selectDestino = document.querySelector('[name="destino_id"]');
+      const campoEnviadoA = document.getElementById('campoEnviadoA');
+      const inputProceso = document.querySelector('[name="proceso"]');
 
-    const password = document.getElementById('passwordU');
-    const icon = this.querySelector('i');
+      // Validar si existen los elementos antes de trabajar con ellos
+      if (selectDestino && campoEnviadoA && inputProceso) {
+        selectDestino.addEventListener('change', function() {
+          const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
 
-    if (password.type === 'password') {
-        password.type = 'text';
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
-    } else {
-        password.type = 'password';
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
-    }
-});
-</script>
+          if (textoSeleccionado === 'persona externa') {
+            campoEnviadoA.style.display = 'block';
 
-    <script>
-      
-      //Para que aparesca el input si hacen click en persona externa, tambien para ver si el usuario es administrador
-      //el texto proceso cambia a enviado pero si es supervisor se mantiene en pendiente
-      const ROL_USUARIO = "<?= $_SESSION['rol'] ?? '' ?>";
-      document.addEventListener('DOMContentLoaded', function() {
-        const selectDestino = document.querySelector('[name="destino_id"]');
-        const campoEnviadoA = document.getElementById('campoEnviadoA');
-        const inputProceso = document.querySelector('[name="proceso"]');
-
-        // Validar si existen los elementos antes de trabajar con ellos
-        if (selectDestino && campoEnviadoA && inputProceso) {
-          selectDestino.addEventListener('change', function() {
-            const textoSeleccionado = this.options[this.selectedIndex].text.toLowerCase().trim();
-
-            if (textoSeleccionado === 'persona externa') {
-              campoEnviadoA.style.display = 'block';
-
-              if (ROL_USUARIO === 'administrador') {
-                inputProceso.value = 'enviado';
-              } else {
-                inputProceso.value = 'pendiente';
-              }
+            if (ROL_USUARIO === 'administrador') {
+              inputProceso.value = 'enviado';
             } else {
-              campoEnviadoA.style.display = 'none';
               inputProceso.value = 'pendiente';
             }
-          });
+          } else {
+            campoEnviadoA.style.display = 'none';
+            inputProceso.value = 'pendiente';
+          }
+        });
+      }
+    });
+
+
+    //Para que aparesca el menu y oculte el menu cuando este en responsive
+    document.addEventListener("DOMContentLoaded", function() {
+      const toggleBtn = document.getElementById("toggleNavbar");
+      const navbarMenu = document.getElementById("navbarNav");
+
+      toggleBtn.addEventListener("click", function() {
+        navbarMenu.classList.toggle("show");
+      });
+    });
+
+
+    // Configuración general para tablas DataTables con scroll y traducción
+    $(document).ready(function() {
+
+      const opcionesComun = (idTabla, contenedorId) => ({
+        scrollX: true,
+        language: {
+          url: 'js/lenguaje.js'
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100],
+        initComplete: function() {
+          document.getElementById(contenedorId).style.visibility = "visible";
         }
       });
 
-
-      //Para que aparesca el menu y oculte el menu cuando este en responsive
-      document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById("toggleNavbar");
-        const navbarMenu = document.getElementById("navbarNav");
-
-        toggleBtn.addEventListener("click", function() {
-          navbarMenu.classList.toggle("show");
-        });
-      });
-
-
-      // Configuración general para tablas DataTables con scroll y traducción
-      $(document).ready(function() {
-        const opcionesComun = (idTabla, contenedorId) => ({
-          scrollX: true,
-          fixedColumns: {
-            leftColumns: 1
+      $('#tablaHerramientas').DataTable({
+        autoWidth: false,
+        language: {
+          url: 'js/lenguaje.js'
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100],
+        columnDefs: [{
+            targets: 0,
+            width: "250px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "250px",
+                "min-width": "250px",
+                "max-width": "250px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
           },
-          language: {
-            url: 'js/lenguaje.js'
+          {
+            targets: 1,
+            width: "400px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "400px",
+                "min-width": "400px",
+                "max-width": "400px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
           },
-          pageLength: 5,
-          lengthMenu: [5, 10, 25, 50, 100],
-          initComplete: function() {
-            document.getElementById(contenedorId).style.visibility = "visible";
+          {
+            targets: 2,
+            width: "50px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "90px",
+                "min-width": "90px",
+                "max-width": "90px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 3,
+            width: "50px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "50px",
+                "min-width": "50px",
+                "max-width": "50px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
           }
-        });
-
-        $('#tablaHerramientas').DataTable(opcionesComun('#tablaHerramientas', 'contenedorHerramientas'));
-        $('#tablaUsuarios').DataTable(opcionesComun('#tablaUsuarios', 'contenedorUsuarios'));
-        $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
-        $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
+        ],
+        drawCallback: function() {
+          $('#tablaHerramientas tbody td:nth-child(1)').css({
+            "width": "200px",
+            "min-width": "200px",
+            "max-width": "200px",
+            "white-space": "normal",
+            "word-break": "break-word",
+            "overflow-wrap": "anywhere"
+          });
+          $('#tablaHerramientas tbody td:nth-child(2)').css({
+            "width": "350px",
+            "min-width": "350px",
+            "max-width": "350px",
+            "white-space": "normal",
+            "word-break": "break-word",
+            "overflow-wrap": "anywhere"
+          });
+          $('#tablaHerramientas tbody td:nth-child(4)').css({
+            "width": "100px",
+            "min-width": "100px",
+            "max-width": "100px",
+            "white-space": "normal",
+            "word-break": "break-word",
+            "overflow-wrap": "anywhere"
+          });
+        },
+        initComplete: function() {
+          document.getElementById('contenedorHerramientas').style.visibility = "visible";
+        }
       });
 
+      $('#tablaUsuarios').DataTable({
+        autoWidth: false,
+        language: {
+          url: 'js/lenguaje.js'
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100],
+        columnDefs: [{
+            targets: 0,
+            width: "150px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "150px",
+                "min-width": "150px",
+                "max-width": "150px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 1,
+            width: "110px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "110px",
+                "min-width": "110px",
+                "max-width": "110px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 2,
+            width: "100px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "100px",
+                "min-width": "100px",
+                "max-width": "100px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 3,
+            width: "150px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "150px",
+                "min-width": "150px",
+                "max-width": "150px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 4,
+            width: "220px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "220px",
+                "min-width": "220px",
+                "max-width": "220px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          },
+          {
+            targets: 5,
+            width: "120px",
+            createdCell: function(td) {
+              $(td).css({
+                "width": "120px",
+                "min-width": "120px",
+                "max-width": "120px",
+                "white-space": "normal",
+                "word-break": "break-word",
+                "overflow-wrap": "anywhere"
+              });
+            }
+          }
+        ],
+        initComplete: function() {
+          document.getElementById('contenedorUsuarios').style.visibility = "visible";
+        }
+      });
+      $('#tablaFabricas').DataTable(opcionesComun('#tablaFabricas', 'contenedorFabricas'));
+      $('#tablaMovimientos').DataTable(opcionesComun('#tablaMovimientos', 'contenedorMovimientos'));
 
-      //Validacion formulario usuarios
-      document.querySelector("#formUsuario")?.addEventListener("submit", function(e) {
+    });
+
+
+    //Validacion formulario usuarios
+    document.querySelector("#formUsuario")?.addEventListener("submit", function(e) {
       const nombreyA = document.querySelector('input[name="nombreyapellidoU"]').value.trim();
       const fechaU = document.querySelector('input[name="fechaU"]').value.trim();
       const nombreU = document.querySelector('input[name="nombreU"]').value.trim();
@@ -112,59 +281,75 @@ document.getElementById('togglePassword').addEventListener('click', function () 
       const esEdicion = <?= $esEdicion ? 'true' : 'false' ?>;
       const faltaPassword = !passwordU && !esEdicion;
 
-        if (
-          !nombreyA ||
-          !fechaU ||
-          !nombreU ||
-          faltaPassword ||
-          !emailU ||
-          fabricaU === "Seleccionar" ||
-          rolU === "Seleccionar"
-        ) {
-          e.preventDefault();
-          const modal = new bootstrap.Modal(document.getElementById('modalError'));
-          modal.show();
-        }
-      });
+      if (
+        !nombreyA ||
+        !fechaU ||
+        !nombreU ||
+        faltaPassword ||
+        !emailU ||
+        fabricaU === "Seleccionar" ||
+        rolU === "Seleccionar"
+      ) {
+        e.preventDefault();
+        const modal = new bootstrap.Modal(document.getElementById('modalError'));
+        modal.show();
+      }
+    });
 
 
-      //Validadion herramientas
-      document.querySelector("#formHerramienta")?.addEventListener("submit", function(e) {
+    //Validadion herramientas
+    document.querySelector("#formHerramienta")?.addEventListener("submit", function(e) {
       const nombre = document.querySelector('input[name="nombreH"]').value.trim();
       const descripcion = document.querySelector('input[name="descripcionH"]').value.trim();
       const codigo = document.querySelector('input[name="codigoH"]').value.trim();
       const estado = document.querySelector('select[name="estadoH"]').value;
       const fabrica = document.querySelector('select[name="fabricaH"]').value;
 
-        if (
-          !nombre ||
-          !descripcion ||
-          !codigo ||
-          estado === "Seleccionar" ||
-          fabrica === "Seleccionar"
-        ) {
-          e.preventDefault();
-          const modal = new bootstrap.Modal(document.getElementById('modalError'));
-          modal.show();
+      if (
+        !nombre ||
+        !descripcion ||
+        !codigo ||
+        estado === "Seleccionar" ||
+        fabrica === "Seleccionar"
+      ) {
+        e.preventDefault();
+        const modal = new bootstrap.Modal(document.getElementById('modalError'));
+        modal.show();
+      }
+    });
+
+    // Toggle mostrar/ocultar contraseña (genérico para cualquier página)
+    document.querySelectorAll('[id^="togglePassword"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const inputGroup = btn.closest('.input-group');
+        const input = inputGroup ? inputGroup.querySelector('input') : null;
+        if (!input) return;
+        input.setAttribute('type', input.type === 'password' ? 'text' : 'password');
+        const icon = btn.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('bi-eye');
+          icon.classList.toggle('bi-eye-slash');
         }
       });
+    });
 
-      //Validacion fabricas
-      document.querySelector("#formFabrica")?.addEventListener("submit", function(e) {
+    //Validacion fabricas
+    document.querySelector("#formFabrica")?.addEventListener("submit", function(e) {
       const nombre = document.querySelector('input[name="nombreF"]').value.trim();
       const lugar = document.querySelector('input[name="lugarF"]').value.trim();
 
-        if (
-          !nombre ||
-          !lugar
-        ) {
-          e.preventDefault();
-          const modal = new bootstrap.Modal(document.getElementById('modalError'));
-          modal.show();
-        }
-      });
-    </script>
+      if (
+        !nombre ||
+        !lugar
+      ) {
+        e.preventDefault();
+        const modal = new bootstrap.Modal(document.getElementById('modalError'));
+        modal.show();
+      }
+    });
+  </script>
 
 
-</body>
-</html>
+  </body>
+
+  </html>

@@ -16,7 +16,7 @@
       <?php foreach ($herramientas as $herramienta): ?>
         <tr>
           <td><?= htmlspecialchars($herramienta['nombre_herramienta'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-<td  class="col-descripcion">
+<td>
   <?= htmlspecialchars($herramienta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </td>
           <td><?= htmlspecialchars($herramienta['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>

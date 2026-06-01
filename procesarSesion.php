@@ -27,10 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       header("Location: index.php");
       exit();
     } else {
-      $_SESSION["error_login"] = "La contraseña es incorrecta.";
+      $_SESSION["error_login"] = "Error en la contraseña.";
+      $_SESSION["error_tipo"] = "password";
+      $_SESSION["login_usuario"] = $usuario;
     }
   } else {
-    $_SESSION["error_login"] = "El usuario no existe.";
+    $_SESSION["error_login"] = "Usuario y contraseña incorrecta.";
+    $_SESSION["error_tipo"] = "usuario";
   }
 
   // Redirigir para evitar reenviar formulario al actualizar

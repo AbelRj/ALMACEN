@@ -1,6 +1,13 @@
 <?php include('templates/header.php'); ?>
 
 <!-- TABLA DE MOVIMIENTOS -->
+<?php if (!empty($movimientos)): ?>
+  <div class="mb-3">
+    <a href="crudM/aprobarTodoM.php" class="btn btn-primary">
+      <i class="bi bi-check-all"></i> Aprobar todo
+    </a>
+  </div>
+<?php endif; ?>
 <div class="table-responsive" id="contenedorMovimientos" style="visibility: hidden;">
   <table id="tablaMovimientos" class="table table-striped table-bordered nowrap" style="width:100%">
     <thead class="table-dark text-center">
@@ -34,10 +41,6 @@
           <td><?= htmlspecialchars($mov['fecha_envio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
           <td><?= htmlspecialchars($mov['proceso'] ?? '---', ENT_QUOTES, 'UTF-8'); ?></td>
           <td>
-            <a href="crudM/editarM.php?id=<?= $mov['id']; ?>" type="button" class="btn btn-primary">
-              <i class="bi bi-check-lg"></i>
-            </a>
-
             <!-- Botón eliminar con modal -->
             <button type="button" class="btn btn-danger btnEliminarMovimiento btnEliminar"
               data-id="<?= $mov['id']; ?>"
